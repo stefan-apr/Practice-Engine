@@ -8,13 +8,15 @@ import { TextArea, FormBtn } from "../components/Form";
 class Problem extends Component {
   state = {
     problem: {},
-    userSolution: ""
+    userSolution: "",
+    lastSolution: ""
   };
   // When this component mounts, grab the problem with the _id of this.props.match.params.id
   // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
-  componentDidMount() {
+  componentDidMount() { 
     API.getProblem(this.props.match.params.id)
       .then(res => this.setState({ problem: res.data }))
+      .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
       .catch(err => console.log(err));
   }
 
@@ -23,7 +25,6 @@ class Problem extends Component {
     this.setState({
       [name]: value
     });
-    window.localStorage.setItem(this.state.problem.title, value);
   }
 
   handleSubmit = event => {
@@ -34,7 +35,11 @@ class Problem extends Component {
       [name]: value
     });
 
-    console.log(this.state.userSolution);
+    window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
+    console.log("Stuff in localStorage: " + window.localStorage.getItem(this.state.problem.title));
+    console.log("User's last solution: " + this.state.lastSolution);
+
+    console.log("User's most recent solution: " + this.state.userSolution);
     let trials = this.state.problem.trials;
 
     for(let i = 0; i < trials.length; i++) {
@@ -99,7 +104,7 @@ class Problem extends Component {
               </p>
             </article>
             <h3>Input your solution:</h3>
-            <TextArea onChange = {this.handleChange} name="userSolution" placeholder="Your Solution Here" value = {this.state.userSolution}></TextArea>
+            <TextArea onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.userSolution}>{this.state.lastSolution}</TextArea>
             <FormBtn
                 disabled={!(this.state.userSolution)}
                 onClick={this.handleSubmit}
