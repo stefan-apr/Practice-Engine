@@ -19,7 +19,7 @@ const factorialSolution = "solutionFactorial = function(value) { \
   if(value < 0) { \
       throw 'Argument cannot be negative'; \
   } else if (value > 0) { \
-      return value * factorial(value - 1); \
+      return value * solutionFactorial(value - 1); \
   } else { \
       return 1; \
   } \

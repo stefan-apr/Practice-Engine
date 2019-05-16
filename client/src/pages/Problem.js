@@ -11,19 +11,19 @@ class Problem extends Component {
     this.state = {
       problem: {},
       userSolution: "",
-      lastSolution: ""
+      lastSolution: "",
+      userTrials: [],
+      solutionTrials: []
     };
-
-    API.getProblem(this.props.match.params.id)
-      .then(res => this.setState({ problem: res.data }))
-      .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
-      .catch(err => console.log(err));
   }
   
   // When this component mounts, grab the problem with the _id of this.props.match.params.id
   // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
   componentDidMount() { 
-    
+    API.getProblem(this.props.match.params.id)
+      .then(res => this.setState({ problem: res.data }))
+      .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
+      .catch(err => console.log(err));
   }
 
   handleChange = event => {
@@ -60,34 +60,52 @@ class Problem extends Component {
       let solutionResult;
         
       try {
-        // eslint-disable-next-line
-        eval("factorial = " + this.state.userSolution);
+        if(this.state.lastSolution) {
+          // eslint-disable-next-line
+          eval("factorial = " + this.state.lastSolution);
+        } else {
+          // eslint-disable-next-line
+          eval("factorial = " + this.state.userSolution);
+        }
       } catch(err) {
         userError = err;
         console.log(userError);
-      }
-
-      // eslint-disable-next-line
-      eval(this.state.problem.solution);
-      
-      if(userError === undefined) {
-        try {
-          userResult = factorial(trials[i][0]);
-          console.log(userResult);
-        } catch(err) {
-          userError = err;
-          console.log(userError);
+      } finally {
+        // eslint-disable-next-line
+        eval(this.state.problem.solution);
+        
+        if(userError === undefined) {
+          try {
+            userResult = factorial(trials[i][0]);
+            console.log(userResult);
+          } catch(err) {
+            userError = err;
+            console.log(userError);
+          }
         }
-      }
+        if(userError === undefined) {
+          this.state.userTrials.push(userResult);
+        } else {
+          this.state.userTrials.push(userError);
+        }
 
-      try {
-        solutionResult = solutionFactorial(trials[i][0]);
-        console.log(solutionResult);  
-      } catch(err) {
-        solutionError = err;
-        console.log(solutionError);
-      }    
+        try {
+          solutionResult = solutionFactorial(trials[i][0]);
+          console.log(solutionResult);
+        } catch(err) {
+          solutionError = err;
+          console.log(solutionError);
+        } finally {
+          if(solutionError === undefined) {
+            this.state.solutionTrials.push(solutionResult);
+          } else {
+            this.state.solutionTrials.push(solutionError);
+          }
+        }
+      }   
     }
+    console.log(this.state.userTrials);
+    console.log(this.state.solutionTrials);
   }
 
   render() {
@@ -113,7 +131,7 @@ class Problem extends Component {
             <h3>Input your solution:</h3>
             <TextArea onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.lastSolution || this.state.userSolution}></TextArea>
             <FormBtn
-                disabled={!(this.state.userSolution)}
+                disabled={!(this.state.userSolution || this.state.lastSolution)}
                 onClick={this.handleSubmit}
               >
                 Submit Solution
