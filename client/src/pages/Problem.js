@@ -6,21 +6,28 @@ import API from "../utils/API";
 import { TextArea, FormBtn } from "../components/Form";
 
 class Problem extends Component {
-  state = {
-    problem: {},
-    userSolution: "",
-    lastSolution: ""
-  };
-  // When this component mounts, grab the problem with the _id of this.props.match.params.id
-  // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
-  componentDidMount() { 
+  constructor(props) {
+    super(props);
+    this.state = {
+      problem: {},
+      userSolution: "",
+      lastSolution: ""
+    };
+
     API.getProblem(this.props.match.params.id)
       .then(res => this.setState({ problem: res.data }))
       .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
       .catch(err => console.log(err));
   }
+  
+  // When this component mounts, grab the problem with the _id of this.props.match.params.id
+  // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
+  componentDidMount() { 
+    
+  }
 
   handleChange = event => {
+    this.setState({lastSolution: null});
     const { name, value } = event.target;
     this.setState({
       [name]: value
@@ -104,7 +111,7 @@ class Problem extends Component {
               </p>
             </article>
             <h3>Input your solution:</h3>
-            <TextArea onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.userSolution}>{this.state.lastSolution}</TextArea>
+            <TextArea onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.lastSolution || this.state.userSolution}></TextArea>
             <FormBtn
                 disabled={!(this.state.userSolution)}
                 onClick={this.handleSubmit}
