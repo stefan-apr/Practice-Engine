@@ -4,6 +4,8 @@ import { Col, Row, Container } from "../components/Grid";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { TextArea, FormBtn } from "../components/Form";
+var CodeMirror = require('react-codemirror');
+require("create-react-class")
 
 class Problem extends Component {
   constructor(props) {
@@ -15,8 +17,10 @@ class Problem extends Component {
     };
 
     API.getProblem(this.props.match.params.id)
-      .then(res => this.setState({ problem: res.data }))
-      .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
+      .then(res => {this.setState({ problem: res.data })
+                    console.log("api problem data retrieved")})
+      .then(() => {this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)})
+                    console.log("now the state is: ", this.state)})
       .catch(err => console.log(err));
   }
   
@@ -43,6 +47,7 @@ class Problem extends Component {
     });
 
     window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
+    console.log("name in localStorage: " + this.state.problem.title);
     console.log("Stuff in localStorage: " + window.localStorage.getItem(this.state.problem.title));
     console.log("User's last solution: " + this.state.lastSolution);
 
@@ -111,7 +116,7 @@ class Problem extends Component {
               </p>
             </article>
             <h3>Input your solution:</h3>
-            <TextArea onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.lastSolution || this.state.userSolution}></TextArea>
+            <CodeMirror onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.lastSolution || this.state.userSolution} />
             <FormBtn
                 disabled={!(this.state.userSolution)}
                 onClick={this.handleSubmit}
