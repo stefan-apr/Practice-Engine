@@ -9,16 +9,15 @@ require('codemirror/mode/javascript/javascript');
 import ('codemirror/lib/codemirror.css');
 import ('codemirror/theme/material.css');
 
-
 class Problem extends Component {
   
   state = {
     problem: {},
     userSolution: "",
     lastSolution: "",
-    trialData: {trials: [], userTrials: [], solutionTrials: []}
+    trialData: {trials: [], userTrials: [], solutionTrials: [], comparison: []}
   };
-
+ 
   // When this component mounts, grab the problem with the _id of this.props.match.params.id
   // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
   componentDidMount() { 
@@ -50,6 +49,7 @@ class Problem extends Component {
       let userTrials = [];
       let solutionTrials = [];
       let indiv = [];
+      let comparison = [];
 
       for(let i = 0; i < trials.length; i++) {
         let factorial = function() {};
@@ -95,13 +95,23 @@ class Problem extends Component {
           } finally {
             if(solutionError === undefined) {
               solutionTrials.push(solutionResult);
+              if(solutionResult === userResult) {
+                comparison.push(true);
+              } else {
+                comparison.push(false);
+              }
             } else {
               solutionTrials.push(solutionError);
+                if(userError !== undefined && userError !== "Syntax Error") {
+                  comparison.push(true);
+                } else {
+                  comparison.push(false);
+                }
             }
           }
         }   
       }
-      this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials}});
+      this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison}});
       document.getElementById("result-table").removeAttribute("hidden");
   }
 
@@ -133,7 +143,7 @@ class Problem extends Component {
               >
                 Submit Solution
             </FormBtn>
-            <table hidden = {"hidden"} id="result-table">
+            <table hidden = {"hidden"} id="result-table" className="table table-bordered">
               <tbody>
               <tr>
                 <th>Trial:</th>
@@ -142,11 +152,11 @@ class Problem extends Component {
                 <th>Actual:</th>
               </tr>
             {this.state.trialData.trials.map((trial, index) => (
-              <tr>
+              <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
                 <td>{index}</td>
                 <td>{trial}</td>
                 <td>{this.state.trialData.solutionTrials[index]}</td>
-                <td>{this.state.trialData.userTrials[index]}</td>
+                <td>{this.state.trialData.userTrials[index] instanceof Error ? this.state.trialData.userTrials[index].toString() : this.state.trialData.userTrials[index]}</td>
               </tr>
             ))}</tbody></table>
           </Col>
