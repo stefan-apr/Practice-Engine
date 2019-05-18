@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { TextArea, FormBtn } from "../components/Form";
-var CodeMirror = require('react-codemirror');
-require("create-react-class")
+import { FormBtn } from "../components/Form";
+import CodeMirrorEditor from '../components/CodeMirrorEditor';
+require('codemirror/mode/javascript/javascript');
+import ('codemirror/lib/codemirror.css');
+import ('codemirror/theme/material.css');
+
 
 class Problem extends Component {
   constructor(props) {
@@ -19,6 +22,9 @@ class Problem extends Component {
     };
   }
   
+ 
+
+
   // When this component mounts, grab the problem with the _id of this.props.match.params.id
   // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
   componentDidMount() { 
@@ -30,9 +36,10 @@ class Problem extends Component {
 
   handleChange = event => {
     this.setState({lastSolution: null});
-    const { name, value } = event.target;
+    var editor = document.querySelector('.CodeMirror').CodeMirror;
+    const value = editor.getValue();
     this.setState({
-      [name]: value
+      userSolution: value
     });
   }
 
@@ -132,7 +139,7 @@ class Problem extends Component {
               </p>
             </article>
             <h3>Input your solution:</h3>
-            <CodeMirror onChange = {this.handleChange} id="response" name="userSolution" placeholder="Your Solution Here" value={this.state.lastSolution || this.state.userSolution} />
+            <CodeMirrorEditor onChange={this.handleChange} id="response" name="userSolution" value={this.state.lastSolution || this.state.userSolution} />
             <FormBtn
                 disabled={!(this.state.userSolution || this.state.lastSolution)}
                 onClick={this.handleSubmit}
