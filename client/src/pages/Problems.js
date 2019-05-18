@@ -36,6 +36,11 @@ class Problems extends Component {
         this.setState({ problems: res.data, title: "", category: "" })
       )
       .catch(err => console.log(err));
+
+    API.getUsers()
+      .then(res =>
+        console.log(res.data)
+      )
   };
 
   deleteProblem = id => {

@@ -38,6 +38,7 @@ const factorialTrials = [
 const problemSeed = [
   {
     title: "Factorial",
+    author: "sapreut",
     question: factorialQuestion,
     solution: factorialSolution,
     trials: factorialTrials,

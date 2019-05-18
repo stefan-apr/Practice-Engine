@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const problemSchema = new Schema({
   title: {type: String, required: true},
+  author: {type: String, required: true},
   question: {type: String, required: true},
   solution: {type: String, required: true},
   trials: {type: Array, required: true},
