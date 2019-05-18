@@ -6,17 +6,14 @@ import API from "../utils/API";
 import { TextArea, FormBtn } from "../components/Form";
 
 class Problem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      problem: {},
-      userSolution: "",
-      lastSolution: "",
-      userTrials: [],
-      solutionTrials: []
-    };
-  }
   
+  state = {
+    problem: {},
+    userSolution: "",
+    lastSolution: "",
+    trialData: {trials: [], userTrials: [], solutionTrials: []}
+  };
+
   // When this component mounts, grab the problem with the _id of this.props.match.params.id
   // e.g. localhost:3000/problems/599dcb67f0f16317844583fc
   componentDidMount() { 
@@ -39,73 +36,67 @@ class Problem extends Component {
 
     const { name, value } = event.target;
     this.setState({
-      [name]: value
+      [name]: value,
     });
 
-    window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
-    console.log("Stuff in localStorage: " + window.localStorage.getItem(this.state.problem.title));
-    console.log("User's last solution: " + this.state.lastSolution);
+      window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
+      let trials = this.state.problem.trials;
+      let userTrials = [];
+      let solutionTrials = [];
+      let indiv = [];
 
-    console.log("User's most recent solution: " + this.state.userSolution);
-    let trials = this.state.problem.trials;
+      for(let i = 0; i < trials.length; i++) {
+        let factorial = function() {};
+        let solutionFactorial = function() {};
+        let userError;
+        let solutionError;
+        let userResult;
+        let solutionResult;
 
-    for(let i = 0; i < trials.length; i++) {
-      console.log("Trial " + (i + 1) + ":");
-      console.log("Parameter: " + trials[i][0]);
-      let factorial = function() {};
-      let solutionFactorial = function() {};
-      let userError;
-      let solutionError;
-      let userResult;
-      let solutionResult;
-        
-      try {
-        if(this.state.lastSolution) {
-          // eslint-disable-next-line
-          eval("factorial = " + this.state.lastSolution);
-        } else {
-          // eslint-disable-next-line
-          eval("factorial = " + this.state.userSolution);
-        }
-      } catch(err) {
-        userError = err;
-        console.log(userError);
-      } finally {
-        // eslint-disable-next-line
-        eval(this.state.problem.solution);
-        
-        if(userError === undefined) {
-          try {
-            userResult = factorial(trials[i][0]);
-            console.log(userResult);
-          } catch(err) {
-            userError = err;
-            console.log(userError);
-          }
-        }
-        if(userError === undefined) {
-          this.state.userTrials.push(userResult);
-        } else {
-          this.state.userTrials.push(userError);
-        }
-
+        indiv.push(trials[i][0]);
+          
         try {
-          solutionResult = solutionFactorial(trials[i][0]);
-          console.log(solutionResult);
-        } catch(err) {
-          solutionError = err;
-          console.log(solutionError);
-        } finally {
-          if(solutionError === undefined) {
-            this.state.solutionTrials.push(solutionResult);
+          if(this.state.lastSolution) {
+            // eslint-disable-next-line
+            eval("factorial = " + this.state.lastSolution);
           } else {
-            this.state.solutionTrials.push(solutionError);
+            // eslint-disable-next-line
+            eval("factorial = " + this.state.userSolution);
           }
-        }
-      }   
-    }
-    console.log(this.state.userTrials);
-    console.log(this.state.solutionTrials);
+        } catch(err) {
+          userError = err;
+        } finally {
+          // eslint-disable-next-line
+          eval(this.state.problem.solution);
+          
+          if(userError === undefined) {
+            try {
+              userResult = factorial(trials[i][0]);
+            } catch(err) {
+              userError = err;
+            }
+          }
+          if(userError === undefined) {
+            userTrials.push(userResult);
+          } else {
+            userTrials.push(userError);
+          }
+
+          try {
+            solutionResult = solutionFactorial(trials[i][0]);
+          } catch(err) {
+            solutionError = err;
+          } finally {
+            if(solutionError === undefined) {
+              solutionTrials.push(solutionResult);
+            } else {
+              solutionTrials.push(solutionError);
+            }
+          }
+        }   
+      }
+      this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials}});
+      document.getElementById("result-table").removeAttribute("hidden");
   }
 
   render() {
@@ -136,7 +127,22 @@ class Problem extends Component {
               >
                 Submit Solution
             </FormBtn>
-            
+            <table hidden = {"hidden"} id="result-table">
+              <tbody>
+              <tr>
+                <th>Trial:</th>
+                <th>Parameters:</th>
+                <th>Expected:</th>
+                <th>Actual:</th>
+              </tr>
+            {this.state.trialData.trials.map((trial, index) => (
+              <tr>
+                <td>{index}</td>
+                <td>{trial}</td>
+                <td>{this.state.trialData.solutionTrials[index]}</td>
+                <td>{this.state.trialData.userTrials[index]}</td>
+              </tr>
+            ))}</tbody></table>
           </Col>
         </Row>
         <Row>
