@@ -9,8 +9,8 @@ mongoose.connect(
 );
 
 const factorialQuestion = "Write an anonymous function that accepts an integer parameter n and uses recursion to \
-  compute and return n factorial, (n!). The function should throw an error if n is negative or if n is not a number. Some potential values of n \
-  and the expected return are shown below:"
+  compute and return n factorial, (n!). The function should throw an error if n is negative or if n is not a number. You may declare a helper method \
+  within your anonymous function if you like, and recurse using that. Alternatively, you may recurse on your anonymous function by calling user(n)."
 
 const factorialSolution = "solution = function(value) { \
   if(isNaN(value)) { \
@@ -38,7 +38,7 @@ const factorialTrials = [
 const arrayStretchQuestion = "Write an anonymous function that accepts an array as a parameter and returns a new array twice as \
   large as the original, replacing every value from the original array with a pair of values, each half the original value. \
   For example, if a variable named list refers to an array storing the values \
-  {18, 7, 4, 24, 11}, the call of stretch(list) should return a new array containing {9, 9, 4, 3, 2, 2, 12, 12, 6, 5}. \
+  {18, 7, 4, 24, 11}, the call of stretch(list) should return a new array containing {9, 9, 3.5, 3.5, 2, 2, 12, 12, 5.5, 5.5}. \
   If any item in the parameter array is not a number, have your code throw an error."
 
 const arrayStretchSolution = "solution = function(values) { \
@@ -105,7 +105,7 @@ const isPalindromeSolution = "solution = function(value) { \
   value = value.replace(/\\s/g,''); \
   value = value.toLowerCase(); \
   for(let i = 0; i < value.length; i++) { \
-      if(value.charAt(i) != value.charAt(value.length - (1 + i))) { \
+      if(value.charAt(i) !== value.charAt(value.length - (1 + i))) { \
           return false; \
       } \
   } \
@@ -125,6 +125,33 @@ const isPalindromeTrials = [
   [42]
 ];
 
+const isUniqueQuestion = "Write an anonymous function that takes an array as a parameter and returns a boolean value \
+  indicating whether or not the values in the array are unique (true for yes, false for no). The values in the list are considered unique \
+  if there is no pair of values that are equal. For example, if a variable called list stores the following values: {3, 8, 12, 2, 9, 15, 29}, the \
+  function will return true as there is no value that appears more than one in the list. You may assume that the incoming array will only store \
+  String, boolean, float, or integer elements.";
+
+const isUniqueSolution = "solution = function(values) { \
+  for(let i = 0; i < values.length; i++) { \
+      for(let j = 0; j < values.length; j++) { \
+          if(values[i] === values[j] && i !== j) { \
+              return false; \
+          } \
+      } \
+  } \
+  return true; \
+}";
+
+const isUniqueTrials = [
+  [[]],
+  [[42]],
+  [[1, 3, 3]],
+  [["These", "are", "all", "unique"]],
+  [["These", "really", "really", "aren't"]],
+  [[3, 5.5, "String", false]],
+  [[9, 4.4, 4.3, "String", "String", true]]
+];
+
 const problemSeed = [
   {
     title: "Factorial",
@@ -133,7 +160,7 @@ const problemSeed = [
     solution: factorialSolution,
     trials: factorialTrials,
     difficulty: 2,
-    category: "Basic Recursion",
+    category: "Recursion",
     verified: true
   },
   {
@@ -164,6 +191,16 @@ const problemSeed = [
     trials: isPalindromeTrials,
     difficulty: 2,
     category: "String Parsing",
+    verified: true
+  },
+  {
+    title: "Is Unique",
+    author: "sapreut",
+    question: isUniqueQuestion,
+    solution: isUniqueSolution,
+    trials: isUniqueTrials,
+    difficulty: 2,
+    category: "Array Manipulation",
     verified: true
   }
 ];

@@ -71,11 +71,10 @@ class Problem extends Component {
             eval("user = " + this.state.userSolution);
           }
         } catch(err) {
-          userError = err;
+          userError = "Syntax Error: " + err.message;
         } finally {
           // eslint-disable-next-line
           eval(this.state.problem.solution);
-          
           if(userError === undefined) {
             try {
               userResult = user(trials[i][0]);
@@ -111,18 +110,18 @@ class Problem extends Component {
               }
             } else {
               solutionTrials.push(solutionError);
-                if(userError !== undefined && userError !== "Syntax Error") {
-                  comparison.push(true);
-                } else {
-                  comparison.push(false);
-                }
+              if(userError !== undefined && !userError.match(/^Syntax Error/)) {
+                comparison.push(true);
+              } else {
+                comparison.push(false);
+              }
             }
           }
         }   
       }
       this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison}});
       document.getElementById("result-table").removeAttribute("hidden");
-  }
+    }
 
   render() {
     return (
@@ -162,11 +161,6 @@ class Problem extends Component {
               </tr>
             {this.state.trialData.trials.map((trial, index) => (
               <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
-                {console.log(index)}
-                {console.log(trial)}
-                {console.log(this.state.trialData.solutionTrials[index])}
-                {console.log(this.state.trialData.userTrials[index])}
-
                 <td>{index}</td>
                 <td>{Array.isArray(trial) ? trial.length === 0 ? "Empty Array" : trial.join(", ") : JSON.stringify(trial)}</td>
                 <td>{Array.isArray(this.state.trialData.solutionTrials[index]) ? this.state.trialData.solutionTrials[index].length === 0 ? "Empty Array" : this.state.trialData.solutionTrials[index].join(", ") : JSON.stringify(this.state.trialData.solutionTrials[index])}</td>
