@@ -36,7 +36,7 @@ const factorialTrials = [
 ];
 
 const arrayStretchQuestion = "Write an anonymous function that accepts an array as a parameter and returns a new array twice as \
-  large as the original, replacing every value from the original array with a pair of values, each half the original. \
+  large as the original, replacing every value from the original array with a pair of values, each half the original value. \
   For example, if a variable named list refers to an array storing the values \
   {18, 7, 4, 24, 11}, the call of stretch(list) should return a new array containing {9, 9, 4, 3, 2, 2, 12, 12, 6, 5}. \
   If any item in the parameter array is not a number, have your code throw an error."
@@ -72,13 +72,14 @@ const rotateRightQuestion = "Write an anonymous function that accepts an array a
   in the new array.";
 
 const rotateRightSolution = "solution = function(values) { \
-  result = []; \
+  let result = []; \
   if(values.length > 1) { \
       for(let i = values.length - 1; i > 0; i--) { \
           result[i] = values[i - 1]; \
       } \
-      result[0] = values[values.length-1]; \
-  }   \
+  } if(values.length > 0) {  \
+    result[0] = values[values.length-1]; \
+  } \
   return result; \
 }";
 
@@ -88,25 +89,23 @@ const rotateRightTrials = [
   [[100, 200]],
   [[3, 8, 19, 7]],
   [[10, 20, 30, 40, 50, 60, 70]],
-  [["senstence", "should", "make", "sense.", "This"]]
+  [["sentence", "should", "make", "sense.", "This"]]
 ];
 
 const isPalindromeQuestion = "Write an anonymous function that accepts a String as a parameter and returns true \
 if the String is a palindrome and false otherwise. A String is considered a palindrome if it has the same sequence of letters \
 when reversed (e.g., 'radar', 'toot', 'mom', 'a', and ''). Your method should be case-insensitive; for example, 'Mom' and 'RAdar' \
 should be considered palindromes. If the String has spaces, they should be ignored when testing palindromy. If the parameter passed \
-is not a String, your code should throw an error. \
-HINT: Use the typeof operator to make sure the parameter is a String. \
-HINT: Use .replace(/\\s/g,'') to eliminate whitespace in the text.";
+is not a String, your code should throw an error. \n HINT: Use the typeof operator to make sure the parameter is a String. \n HINT: Use .replace(/\\s/g,'') to eliminate whitespace in the text.";
 
 const isPalindromeSolution = "solution = function(value) { \
-  if(typeof(value) !== string) { \
+  if(typeof(value) !== 'string') { \
     throw 'Parameter must be a String.'; \
   } \
   value = value.replace(/\\s/g,''); \
   value = value.toLowerCase(); \
-  for(let i = 0; i < value.length(); i++) { \
-      if(value.charAt(i) != value.charAt(value.length() - (1 + i))) { \
+  for(let i = 0; i < value.length; i++) { \
+      if(value.charAt(i) != value.charAt(value.length - (1 + i))) { \
           return false; \
       } \
   } \
