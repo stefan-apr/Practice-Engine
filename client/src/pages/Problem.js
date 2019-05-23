@@ -24,6 +24,7 @@ class Problem extends Component {
     API.getProblem(this.props.match.params.id)
       .then(res => this.setState({ problem: res.data }))
       .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
+      .then(() => console.log(this.state.problem))
       .catch(err => console.log(err));
   }
 
@@ -52,8 +53,8 @@ class Problem extends Component {
       let comparison = [];
 
       for(let i = 0; i < trials.length; i++) {
-        let factorial = function() {};
-        let solutionFactorial = function() {};
+        let user = function() {};
+        let solution = function() {};
         let userError;
         let solutionError;
         let userResult;
@@ -64,10 +65,10 @@ class Problem extends Component {
         try {
           if(this.state.lastSolution) {
             // eslint-disable-next-line
-            eval("factorial = " + this.state.lastSolution);
+            eval("user = " + this.state.lastSolution);
           } else {
             // eslint-disable-next-line
-            eval("factorial = " + this.state.userSolution);
+            eval("user = " + this.state.userSolution);
           }
         } catch(err) {
           userError = err;
@@ -77,7 +78,7 @@ class Problem extends Component {
           
           if(userError === undefined) {
             try {
-              userResult = factorial(trials[i][0]);
+              userResult = user(trials[i][0]);
             } catch(err) {
               userError = err;
             }
@@ -89,7 +90,7 @@ class Problem extends Component {
           }
 
           try {
-            solutionResult = solutionFactorial(trials[i][0]);
+            solutionResult = solution(trials[i][0]);
           } catch(err) {
             solutionError = err;
           } finally {
@@ -153,6 +154,11 @@ class Problem extends Component {
               </tr>
             {this.state.trialData.trials.map((trial, index) => (
               <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
+                {console.log(index)}
+                {console.log(trial)}
+                {console.log(this.state.trialData.solutionTrials[index])}
+                {console.log(this.state.trialData.userTrials[index])}
+
                 <td>{index}</td>
                 <td>{trial}</td>
                 <td>{this.state.trialData.solutionTrials[index]}</td>
