@@ -145,20 +145,22 @@ class Problem extends Component {
             </FormBtn>
             <table hidden = {"hidden"} id="result-table" className="table table-bordered">
               <tbody>
-              <tr>
-                <th>Trial:</th>
-                <th>Parameters:</th>
-                <th>Expected:</th>
-                <th>Actual:</th>
-              </tr>
-            {this.state.trialData.trials.map((trial, index) => (
-              <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
-                <td>{index}</td>
-                <td>{trial}</td>
-                <td>{this.state.trialData.solutionTrials[index]}</td>
-                <td>{this.state.trialData.userTrials[index] instanceof Error ? this.state.trialData.userTrials[index].toString() : this.state.trialData.userTrials[index]}</td>
-              </tr>
-            ))}</tbody></table>
+                <tr>
+                  <th>Trial:</th>
+                  <th>Parameters:</th>
+                  <th>Expected:</th>
+                  <th>Actual:</th>
+                </tr>
+                {this.state.trialData.trials.map((trial, index) => (
+                  <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
+                    <td>{index}</td>
+                    <td>{trial}</td>
+                    <td>{this.state.trialData.solutionTrials[index]}</td>
+                    <td>{this.state.trialData.userTrials[index] instanceof Error ? this.state.trialData.userTrials[index].toString() : this.state.trialData.userTrials[index]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </Col>
         </Row>
         <Row>
