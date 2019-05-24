@@ -44,7 +44,7 @@ class Problem extends Component {
       plugins: [loopcontrol]
     });
     // print the generated code to screen
-    console.log(out.code);
+    // console.log(out.code);
     return out.code;
   }
 
@@ -70,19 +70,21 @@ class Problem extends Component {
         let solutionError;
         let userResult;
         let solutionResult;
-        let src;
+        let param1;
+        let param2;
+        let param3;
+        let param4;
+        let param5;
 
-        indiv.push(trials[i][0]);
+        indiv.push(trials[i]);
           
         try {
           if(this.state.lastSolution) {
-            src = this.state.lastSolution;
             // eslint-disable-next-line
-            eval(this.modifySrc("user = " + src));
+            eval(this.modifySrc("user = " + this.state.lastSolution));
           } else {
-            src = this.state.userSolution
             // eslint-disable-next-line
-            eval(this.modifySrc("user = " + src));
+            eval(this.modifySrc("user = " + this.state.userSolution));
           }
         } catch(err) {
           userError = "Syntax Error: " + err.message;
@@ -91,7 +93,23 @@ class Problem extends Component {
           eval(this.state.problem.solution);
           if(userError === undefined) {
             try {
-              userResult = user(trials[i][0]);
+              // This is kind of an awful way to set up the parameters, but I could not think of a way to do it with loops.
+              // It works b/c you can pass in any number of parameters into a JS function and the extras will go unused.
+              // All the extra parameters, (in most cases param2 - param5), will be left undefined which is fine.
+              param1 = trials[i][0];
+              if(trials[i][1] !== undefined) {
+                param2 = trials[i][1];
+                if(trials[i][2] !== undefined) {
+                  param3 = trials[i][2];
+                  if(trials[i][3] !== undefined) {
+                    param4 = trials[i][3];
+                    if(trials[i][4] !== undefined) {
+                      param5 = trials[i][4];
+                    }
+                  }
+                }
+              }
+              userResult = user(param1, param2, param3, param4, param5);
             } catch(err) {
               userError = err;
             }
@@ -103,7 +121,7 @@ class Problem extends Component {
           }
 
           try {
-            solutionResult = solution(trials[i][0]);
+            solutionResult = solution(param1, param2, param3, param4, param5);
           } catch(err) {
             solutionError = err;
           } finally {
@@ -175,10 +193,13 @@ class Problem extends Component {
               </tr>
             {this.state.trialData.trials.map((trial, index) => (
               <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
+
+                {/* console.log(index)}{console.log(trial)}{console.log(this.state.trialData.solutionTrials[index])}{console.log(this.state.trialData.userTrials[index]) */}
+
                 <td>{index}</td>
-                <td>{Array.isArray(trial) ? trial.length === 0 ? "Empty Array" : "[" + trial.join(", ") + "]" : JSON.stringify(trial)}</td>
+                <td>{trial.length === 1 ? Array.isArray(trial[0]) ? trial[0].length === 0 ? "Empty Array" : "[" + trial[0].join(", ") + "]" : JSON.stringify(trial[0]) : "{" + trial.join(", ") + "}"}</td>
                 <td>{Array.isArray(this.state.trialData.solutionTrials[index]) ? this.state.trialData.solutionTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.solutionTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.solutionTrials[index])}</td>
-                <td>{Array.isArray(this.state.trialData.userTrials[index]) ? this.state.trialData.userTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.userTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.userTrials[index])}</td>
+                <td>{typeof(this.state.trialData.userTrials[index]) === "undefined" ? "Return Undefined" : Array.isArray(this.state.trialData.userTrials[index]) ? this.state.trialData.userTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.userTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.userTrials[index])}</td>
               </tr>
             ))}</tbody></table>
           </Col>
