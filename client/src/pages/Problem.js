@@ -8,6 +8,8 @@ import CodeMirrorEditor from '../components/CodeMirrorEditor';
 require('codemirror/mode/javascript/javascript');
 import ('codemirror/lib/codemirror.css');
 import ('codemirror/theme/material.css');
+var babel = require("babel-core");
+var loopcontrol = require("../components/BabelControl/loopcontrol");
 
 class Problem extends Component {
   
@@ -24,7 +26,7 @@ class Problem extends Component {
     API.getProblem(this.props.match.params.id)
       .then(res => this.setState({ problem: res.data }))
       .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
-      .then(() => console.log(this.state.problem))
+      .then(/* () => console.log(this.state.problem) */)
       .catch(err => console.log(err));
   }
 
@@ -35,6 +37,15 @@ class Problem extends Component {
     this.setState({
       userSolution: value
     });
+  }
+
+  modifySrc = function(src) {
+    var out = babel.transform(src, {
+      plugins: [loopcontrol]
+    });
+    // print the generated code to screen
+    console.log(out.code);
+    return out.code;
   }
 
   handleSubmit = event => {
@@ -59,23 +70,25 @@ class Problem extends Component {
         let solutionError;
         let userResult;
         let solutionResult;
+        let src;
 
         indiv.push(trials[i][0]);
           
         try {
           if(this.state.lastSolution) {
+            src = this.state.lastSolution;
             // eslint-disable-next-line
-            eval("user = " + this.state.lastSolution);
+            eval(this.modifySrc("user = " + src));
           } else {
+            src = this.state.userSolution
             // eslint-disable-next-line
-            eval("user = " + this.state.userSolution);
+            eval(this.modifySrc("user = " + src));
           }
         } catch(err) {
-          userError = err;
+          userError = "Syntax Error: " + err.message;
         } finally {
           // eslint-disable-next-line
           eval(this.state.problem.solution);
-          
           if(userError === undefined) {
             try {
               userResult = user(trials[i][0]);
@@ -96,7 +109,7 @@ class Problem extends Component {
           } finally {
             if(solutionError === undefined) {
               solutionTrials.push(solutionResult);
-              if(!Array.isArray(solutionResult)) {
+              if(!Array.isArray(solutionResult) && typeof(solutionResult) !== 'object') {
                 if(solutionResult === userResult) {
                   comparison.push(true);
                 } else {
@@ -111,18 +124,18 @@ class Problem extends Component {
               }
             } else {
               solutionTrials.push(solutionError);
-                if(userError !== undefined && userError !== "Syntax Error") {
-                  comparison.push(true);
-                } else {
-                  comparison.push(false);
-                }
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+                comparison.push(true);
+              } else {
+                comparison.push(false);
+              }
             }
           }
         }   
       }
       this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison}});
       document.getElementById("result-table").removeAttribute("hidden");
-  }
+    }
 
   render() {
     return (
@@ -162,15 +175,10 @@ class Problem extends Component {
               </tr>
             {this.state.trialData.trials.map((trial, index) => (
               <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
-                {console.log(index)}
-                {console.log(trial)}
-                {console.log(this.state.trialData.solutionTrials[index])}
-                {console.log(this.state.trialData.userTrials[index])}
-
                 <td>{index}</td>
-                <td>{Array.isArray(trial) ? trial.length === 0 ? "Empty Array" : trial.join(", ") : JSON.stringify(trial)}</td>
-                <td>{Array.isArray(this.state.trialData.solutionTrials[index]) ? this.state.trialData.solutionTrials[index].length === 0 ? "Empty Array" : this.state.trialData.solutionTrials[index].join(", ") : JSON.stringify(this.state.trialData.solutionTrials[index])}</td>
-                <td>{Array.isArray(this.state.trialData.userTrials[index]) ? this.state.trialData.userTrials[index].length === 0 ? "Empty Array" : this.state.trialData.userTrials[index].join(", ") : JSON.stringify(this.state.trialData.userTrials[index])}</td>
+                <td>{Array.isArray(trial) ? trial.length === 0 ? "Empty Array" : "[" + trial.join(", ") + "]" : JSON.stringify(trial)}</td>
+                <td>{Array.isArray(this.state.trialData.solutionTrials[index]) ? this.state.trialData.solutionTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.solutionTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.solutionTrials[index])}</td>
+                <td>{Array.isArray(this.state.trialData.userTrials[index]) ? this.state.trialData.userTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.userTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.userTrials[index])}</td>
               </tr>
             ))}</tbody></table>
           </Col>
