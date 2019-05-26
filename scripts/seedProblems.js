@@ -40,7 +40,7 @@ const arrayStretchQuestion = "Write an anonymous function that accepts an array 
   large as the original, replacing every value from the original array with a pair of values, each half the original value. \
   For example, if a variable named list refers to an array storing the values \
   {18, 7, 4, 24, 11}, the call of stretch(list) should return a new array containing {9, 9, 3.5, 3.5, 2, 2, 12, 12, 5.5, 5.5}. \
-  If any item in the parameter array is not a number, have your code throw an error."
+  If any item in the parameter array is not a number, have your code throw an error.";
 
 const arrayStretchSolution = "solution = function(values) { \
   let result = []; \
@@ -62,7 +62,39 @@ const arrayStretchTrials = [
   [[42]],
   [[18, 7, 4, 24, 11]],
   [[87, 14, 67, 3, 0, 1, 19, 29]],
-  [[13, "Not a number", [], {}]]
+  [[13, "Not a number", []]]
+];
+
+const arrayStretch2Question = "Write an anonymous function that accepts an array as a parameter and modifies the array into a new array twice as \
+  large as the original, replacing every value from the original array with a pair of values, each half the original value. \
+  For example, if a variable named list refers to an array storing the values \
+  {18, 7, 4, 24, 11}, your function(list) should modify the parameter into a new array containing {9, 9, 3.5, 3.5, 2, 2, 12, 12, 5.5, 5.5}. \
+  If any item in the parameter array is not a number, have your code throw an error.";
+
+const arrayStretch2Solution = "solution = function(values) { \
+  let result = []; \
+  if(values.length > 0) { \
+      for(let i = 0; i < values.length; i++) { \
+        if(isNaN(values[i])) { \
+          throw 'All values in parameter array must be numbers.'; \
+        } else { \
+          result[i*2] = values[i]/2; \
+          result[i*2 + 1] = values[i]/2; \
+        } \
+      } \
+      values.length = 0; \
+      for(let i = 0; i < result.length; i++) { \
+        values[i] = result[i]; \
+      } \
+  } \
+}"
+
+const arrayStretch2Trials = [
+  [[]],
+  [[42]],
+  [[18, 7, 4, 24, 11]],
+  [[87, 14, 67, 3, 0, 1, 19, 29]],
+  [[13, "Not a number", []]]
 ];
 
 const rotateRightQuestion = "Write an anonymous function that accepts an array as a parameter and returns an array with \
@@ -85,6 +117,35 @@ const rotateRightSolution = "solution = function(values) { \
 }";
 
 const rotateRightTrials = [
+  [[]],
+  [[42]],
+  [[100, 200]],
+  [[3, 8, 19, 7]],
+  [[10, 20, 30, 40, 50, 60, 70]],
+  [["sentence", "should", "make", "sense.", "This"]]
+];
+
+const rotateRight2Question = "Write an anonymous function that accepts an array as a parameter and modifies the array such that \
+  the values in the original rotate to the right (i.e., forward in position) by one. Each element moves right by one, except the last \
+  element, which moves to the front. For example, if a variable named list refers to an array containing the values \
+  {3, 8, 19, 7}, the call of function(list) should modify the parameter array to store {7, 3, 8, 19}. Your function should make \
+  no assumptions about the type of elements stored in the original array, but no elements may be lost in the modification.";
+
+const rotateRight2Solution = "solution = function(values) { \
+  let result = []; \
+  if(values.length > 1) { \
+      for(let i = values.length - 1; i > 0; i--) { \
+          result[i] = values[i - 1]; \
+      } \
+  } if(values.length > 0) {  \
+    result[0] = values[values.length-1]; \
+  } \
+  for(let i = 0; i < result.length; i++) { \
+    values[i] = result[i]; \
+  } \
+}";
+
+const rotateRight2Trials = [
   [[]],
   [[42]],
   [[100, 200]],
@@ -218,6 +279,7 @@ const problemSeed = [
     trials: factorialTrials,
     difficulty: 1,
     category: "Recursion",
+    examineType: "return",
     verified: true
   },
   {
@@ -228,6 +290,18 @@ const problemSeed = [
     trials: arrayStretchTrials,
     difficulty: 2,
     category: "Array Manipulation",
+    examineType: "return",
+    verified: true
+  },
+  {
+    title: "Stretch 2",
+    author: "sapreut",
+    question: arrayStretch2Question,
+    solution: arrayStretch2Solution,
+    trials: arrayStretch2Trials,
+    difficulty: 3,
+    category: "Array Manipulation",
+    examineType: "paramArray",
     verified: true
   },
   {
@@ -238,6 +312,18 @@ const problemSeed = [
     trials: rotateRightTrials,
     difficulty: 2,
     category: "Array Manipulation",
+    examineType: "return",
+    verified: true
+  },
+  {
+    title: "Rotate Right 2",
+    author: "sapreut",
+    question: rotateRight2Question,
+    solution: rotateRight2Solution,
+    trials: rotateRight2Trials,
+    difficulty: 3,
+    category: "Array Manipulation",
+    examineType: "paramArray",
     verified: true
   },
   {
@@ -248,6 +334,7 @@ const problemSeed = [
     trials: isPalindromeTrials,
     difficulty: 2,
     category: "String Parsing",
+    examineType: "return",
     verified: true
   },
   {
@@ -258,6 +345,7 @@ const problemSeed = [
     trials: isUniqueTrials,
     difficulty: 1,
     category: "Array Manipulation",
+    examineType: "return",
     verified: true
   },
   {
@@ -268,6 +356,7 @@ const problemSeed = [
     trials: multiplyEvensTrials,
     difficulty: 2,
     category: "Recursion",
+    examineType: "return",
     verified: true
   },
   {
@@ -278,6 +367,7 @@ const problemSeed = [
     trials: hasMidpointTrials,
     difficulty: 1,
     category: "Conditionals and Returns",
+    examineType: "return",
     verified: true
   }
 ];
