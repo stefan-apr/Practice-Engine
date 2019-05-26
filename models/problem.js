@@ -9,6 +9,8 @@ const problemSchema = new Schema({
   trials: {type: Array, required: true},
   difficulty: {type: Number, required: true},
   category: {type: String, required: true},
+  examineType: {type: String, required: true},
+  flags: {type: Array},
   verified: {type: Boolean, default: false}
 });
 

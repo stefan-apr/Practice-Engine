@@ -57,10 +57,11 @@ class Problem extends Component {
     });
 
     window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
-    let trials = this.state.problem.trials;
+    let trials = JSON.parse(JSON.stringify(this.state.problem.trials));
     let userTrials = [];
     let solutionTrials = [];
-    let indiv = [];
+    let indiv = JSON.parse(JSON.stringify(trials));
+    let paramCopy = JSON.parse(JSON.stringify(trials));
     let comparison = [];
     let numCorrect = 0;
 
@@ -71,14 +72,9 @@ class Problem extends Component {
       let solutionError;
       let userResult;
       let solutionResult;
-      let param1;
-      let param2;
-      let param3;
-      let param4;
-      let param5;
+      let param1; let param2; let param3; let param4; let param5;
+      let solParam1; let solParam2; let solParam3; let solParam4; let solParam5;
 
-      indiv.push(trials[i]);
-        
       try {
         if(this.state.lastSolution) {
           // eslint-disable-next-line
@@ -97,15 +93,20 @@ class Problem extends Component {
             // This is kind of an awful way to set up the parameters, but I could not think of a way to do it with loops.
             // It works b/c you can pass in any number of parameters into a JS function and the extras will go unused.
             // All the extra parameters, (in most cases param2 - param5), will be left undefined which is fine.
-            param1 = trials[i][0];
-            if(trials[i][1] !== undefined) {
-              param2 = trials[i][1];
-              if(trials[i][2] !== undefined) {
-                param3 = trials[i][2];
-                if(trials[i][3] !== undefined) {
-                  param4 = trials[i][3];
-                  if(trials[i][4] !== undefined) {
-                    param5 = trials[i][4];
+            param1 = JSON.parse(JSON.stringify(paramCopy[i][0]));
+            solParam1 = JSON.parse(JSON.stringify(paramCopy[i][0]));
+            if(paramCopy[i][1] !== undefined) {
+              param2 = JSON.parse(JSON.stringify(paramCopy[i][1]));
+              solParam2 = JSON.parse(JSON.stringify(paramCopy[i][1]));
+              if(paramCopy[i][2] !== undefined) {
+                param3 = JSON.parse(JSON.stringify(paramCopy[i][2]));
+                solParam3 = JSON.parse(JSON.stringify(paramCopy[i][2]));
+                if(paramCopy[i][3] !== undefined) {
+                  param4 = JSON.parse(JSON.stringify(paramCopy[i][3]));
+                  solParam4 = JSON.parse(JSON.stringify(paramCopy[i][3]));
+                  if(paramCopy[i][4] !== undefined) {
+                    param5 = JSON.parse(JSON.stringify(paramCopy[i][4]));
+                    solParam5 = JSON.parse(JSON.stringify(paramCopy[i][4]));
                   }
                 }
               }
@@ -115,44 +116,83 @@ class Problem extends Component {
             userError = err;
           }
         }
-        if(userError === undefined) {
-          userTrials.push(userResult);
-        } else {
-          userTrials.push(userError);
-        }
 
-        try {
-          solutionResult = solution(param1, param2, param3, param4, param5);
-        } catch(err) {
-          solutionError = err;
-        } finally {
-          if(solutionError === undefined) {
-            solutionTrials.push(solutionResult);
-            if(!Array.isArray(solutionResult) && typeof(solutionResult) !== 'object') {
-              if(solutionResult === userResult) {
-                comparison.push(true);
-                numCorrect++;
-              } else {
-                comparison.push(false);
-              }
-            } else {
-              if(JSON.stringify(solutionResult) === JSON.stringify(userResult)) {
-                comparison.push(true);
-                numCorrect++;
-              } else {
-                comparison.push(false);
-              }
-            }
+        if(this.state.problem.examineType === "return") {
+          if(userError === undefined) {
+            userTrials.push(userResult);
           } else {
-            solutionTrials.push(solutionError);
-            if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
-              comparison.push(true);
-              numCorrect++;
+            userTrials.push(userError);
+          }
+
+          try {
+            solutionResult = solution(solParam1, solParam2, solParam3, solParam4, solParam5);
+          } catch(err) {
+            solutionError = err;
+          } finally {
+            if(solutionError === undefined) {
+              solutionTrials.push(solutionResult);
+              if(!Array.isArray(solutionResult) && typeof(solutionResult) !== 'object') {
+                if(solutionResult === userResult) {
+                  comparison.push(true);
+                  numCorrect++;
+                } else {
+                  comparison.push(false);
+                }
+              } else {
+                if(JSON.stringify(solutionResult) === JSON.stringify(userResult)) {
+                  comparison.push(true);
+                  numCorrect++;
+                } else {
+                  comparison.push(false);
+                }
+              }
             } else {
-              comparison.push(false);
+              solutionTrials.push(solutionError);
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+                comparison.push(true);
+                numCorrect++;
+              } else {
+                comparison.push(false);
+              }
             }
           }
-        }
+        } else if(this.state.problem.examineType === "paramArray") {
+          if(userError === undefined) {
+            userTrials.push(param1);
+          } else {
+            userTrials.push(userError);
+          }
+
+          try {
+            solutionResult = solution(solParam1, solParam2, solParam3, solParam4, solParam5);
+          } catch(err) {
+            solutionError = err;
+          } finally {
+            if(solutionError === undefined) {
+              solutionTrials.push(solParam1);
+              if(JSON.stringify(solParam1) === JSON.stringify(param1)) {
+                comparison.push(true);
+                numCorrect++;
+              } else {
+                comparison.push(false);
+              }
+            } else {
+              solutionTrials.push(solutionError);
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+                comparison.push(true);
+                numCorrect++;
+              } else {
+                comparison.push(false);
+              }
+            }
+          }
+        } else if(this.state.problem.examineType === "paramLinkedList") {
+
+        } else if(this.state.problem.examineType === "paramStack") {
+
+        } else if(this.state.problem.examineType === "paramQueue") {
+
+        } 
       }   
     }
     this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}});
@@ -183,9 +223,9 @@ class Problem extends Component {
             <h3>Input your solution:</h3>
             <CodeMirrorEditor onChange={this.handleChange} id="response" name="userSolution" value={this.state.lastSolution || this.state.userSolution} />
             <FormBtn
-                disabled={!(this.state.userSolution || this.state.lastSolution)}
-                onClick={this.handleSubmit}
-              >
+              disabled={!(this.state.userSolution || this.state.lastSolution)}
+              onClick={this.handleSubmit}
+            >
                 Submit Solution
             </FormBtn>
             <span hidden = {"hidden"} id="trials-passed-banner">
@@ -204,7 +244,7 @@ class Problem extends Component {
             {this.state.trialData.trials.map((trial, index) => (
               <tr key={"trial-" + index} className={(this.state.trialData.comparison[index] ? "table-success" : "table-danger")}>
 
-                {/* Console logs for each table row entry*/}
+                {/* Console logs for each table row entry */}
                 {/* console.log(index)}{console.log(trial)}{console.log(this.state.trialData.solutionTrials[index])}{console.log(this.state.trialData.userTrials[index]) */}
 
                 <td>{index}</td>
