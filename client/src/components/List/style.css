@@ -50,3 +50,8 @@ img {
   width: auto;
   margin-right: 15px;
 }
+
+.pass-fail {
+  height: 30px;
+  width: 30px;
+}
