@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
-// We'll use this to map user problems somehow.
-import HashMap from "../components/HashMap";
 
 /*
 function sleep(ms) {

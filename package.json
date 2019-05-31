@@ -35,8 +35,11 @@
     "harakiri": "^1.0.1",
     "if-env": "^1.0.4",
     "mongoose": "^5.3.16",
-    "react": "^15.6.2",
+    "react": "^16.8.0",
+    "react-bootstrap": "^1.0.0-beta.8",
     "react-codemirror": "^1.0.0",
-    "react-codemirror2": "^6.0.0"
+    "react-codemirror2": "^6.0.0",
+    "react-dom": "^16.8.0",
+    "react-transition-group": "^1.2.1"
   }
 }

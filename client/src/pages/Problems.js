@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
+import Collapse from 'react-bootstrap/Collapse'
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, FormBtn } from "../components/Form";
 
 /*
 function sleep(ms) {
@@ -17,13 +16,9 @@ class Problems extends Component {
 
   state = {
     problems: [],
-    title: "",
-    question: "",
-    solution: "",
-    trials: [],
-    difficulty: 0,
-    category: "",
-    chosenProblem: null,
+    categories: [],
+    open: false,
+    shown: {}
   };
 
   componentDidMount() {
@@ -31,94 +26,64 @@ class Problems extends Component {
   }
 
   loadProblems = () => {
+    let cats = [];
+    let show = {};
     API.getProblems()
-      .then(res =>
-        this.setState({ problems: res.data, title: "", category: "" }, function() {
-        
-        })    
+      .then(res => {
+        for(let i = 0; i < res.data.length; i++) {
+          if(cats.indexOf(res.data[i].category) === -1) {
+            cats.push(res.data[i].category);
+          }
+        }
+        for(let i = 0; i < cats.length; i++) {
+          show[cats[i]] = false;
+        }
+        this.setState({problems: res.data, categories: cats, shown: show});
+        }   
       )
       .catch(err => console.log(err));
   };
 
-  deleteProblem = id => {
-    API.deleteProblem(id)
-      .then(res => this.loadProblems())
-      .catch(err => console.log(err));
-  };
-
-  handleInputChange = event => {
-    const { name, value } = event.target;
+  toggle(category) {
     this.setState({
-      [name]: value,
-      chosenProblem: null
-    });
-  };
-
-  handleSave = event => {
-    event.preventDefault();
-
-    // Change this.state with the user input fields
-
-    if (this.state.title && this.state.category && this.state.question && this.state.solution && this.state.trials) {
-      API.saveProblem({
-        title: this.state.title,
-        question: this.state.question,
-        solution: this.state.solution,
-        trials: this.state.trials,
-        category: this.state.category,
-      })
-        .then(res => this.loadProblems())
-        .catch(err => console.log(err));
-    }
-  };
+         shown: {
+             ...this.state.shown,
+             [category]: !this.state.shown[category]
+         }
+     })
+ }
 
   render() {
+    const {shown} = this.state;
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-12 sm-12">
             <Jumbotron>
-              <h1>Create a new Practice Problem</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                onKeyUp={this.handleKeyUp}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                value={this.state.category}
-                onChange={this.handleInputChange}
-                name="category"
-                placeholder="Category (required)"
-              />
-              <FormBtn
-                disabled={!(this.state.title && this.state.category && this.state.difficulty && this.state.question && this.state.solution)}
-                onClick={this.handleChoose}
-              >
-                Create Problem
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>List of Problems</h1>
+              <h2>Problems:</h2><br></br>
+            <h3>Click on a category to see its available problems.</h3>
             </Jumbotron>
             {this.state.problems.length ? (
-              <List>
-                {this.state.problems.map(problem => (
-                  <ListItem key={problem._id}>
-                    <Link to={"/problems/" + problem._id}>
-                      <strong>
-                        {problem.title}, Category: {problem.category}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => this.deleteProblem(problem._id)} />
-                  </ListItem>
-                ))}
-              </List>
+             <List>
+               {this.state.categories.map(category => (
+                 <div key={category}
+                 onClick={() => this.toggle(category)}
+                 aria-controls={"collapse-" + category}
+                 aria-expanded={shown[category]}>
+
+                 <ListItem key={category}>
+                   <h4>{category}</h4>
+                   <Collapse in={this.state.shown[category]}>
+                    <ul id={"collapse-" + category} className="problem-list-shell">
+                      {this.state.problems.map(problem => (
+                        problem.category === category ? <li key={problem._id} className="problem-list-item-pass"><Link to={"/problems/" + problem._id}><h5>{problem.title}</h5></Link></li> : ""
+                      ))}
+                    </ul>
+                   </Collapse>
+                 </ListItem>
+                 </div>
+               ))}
+             </List>
             ) : (
               <h3>No Results to Display</h3>
             )}
