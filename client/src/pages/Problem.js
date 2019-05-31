@@ -5,6 +5,7 @@ import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { FormBtn } from "../components/Form";
 import CodeMirrorEditor from '../components/CodeMirrorEditor';
+import ListNode from "../components/LinkedList/ListNode.js";
 require('codemirror/mode/javascript/javascript');
 import ('codemirror/lib/codemirror.css');
 import ('codemirror/theme/material.css');
@@ -48,6 +49,39 @@ class Problem extends Component {
     return out.code;
   }
 
+  typeHandler = function(type, variable) {
+    if(type === "Number" || type === "String" || type === "Boolean") {
+      return variable;
+    } else if(type === "Array") {
+      return JSON.parse(JSON.stringify(variable));
+    } else if (type === "LinkedList") {
+      var list = this.generateLinkedList(variable);
+      return list;
+    }
+  }
+
+  generateLinkedList = function(obj) {
+    if(obj === null) {
+      return null;
+    }
+    if(obj.next === null) {
+      return new ListNode(obj.data);
+    }
+    let listArr = [];
+    do {
+      listArr.push(new ListNode(obj.data));
+      if(obj.next !== null) { 
+        obj = obj.next;
+      }
+    } while(obj.next !== null)
+    listArr.push(new ListNode(obj.data));
+
+    for(let i = 0; i < listArr.length - 1; i++) {
+      listArr[i].next = listArr[i + 1];
+    }
+    return listArr[0];
+  }
+
   handleSubmit = event => {
     event.preventDefault();
 
@@ -57,23 +91,21 @@ class Problem extends Component {
     });
 
     window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
-    let trials = JSON.parse(JSON.stringify(this.state.problem.trials));
     let userTrials = [];
     let solutionTrials = [];
-    let indiv = JSON.parse(JSON.stringify(trials));
-    let paramCopy = JSON.parse(JSON.stringify(trials));
+    let trialCopy = Array.from(this.state.problem.trials);
     let comparison = [];
     let numCorrect = 0;
 
-    for(let i = 0; i < trials.length; i++) {
+    for(let i = 0; i < this.state.problem.trials.length; i++) {
       let user = function() {};
       let solution = function() {};
       let userError;
       let solutionError;
       let userResult;
       let solutionResult;
-      let param1; let param2; let param3; let param4; let param5;
-      let solParam1; let solParam2; let solParam3; let solParam4; let solParam5;
+      let param0; let param1; let param2; let param3; let param4;
+      let solParam0; let solParam1; let solParam2; let solParam3; let solParam4;
 
       try {
         if(this.state.lastSolution) {
@@ -90,28 +122,30 @@ class Problem extends Component {
         eval(this.state.problem.solution);
         if(userError === undefined) {
           try {
-            // This is kind of an awful way to set up the parameters, but I could not think of a way to do it with loops.
-            // It works b/c you can pass in any number of parameters into a JS function and the extras will go unused.
-            // All the extra parameters, (in most cases param2 - param5), will be left undefined which is fine.
-            param1 = JSON.parse(JSON.stringify(paramCopy[i][0]));
-            solParam1 = JSON.parse(JSON.stringify(paramCopy[i][0]));
-            if(paramCopy[i][1] !== undefined) {
-              param2 = JSON.parse(JSON.stringify(paramCopy[i][1]));
-              solParam2 = JSON.parse(JSON.stringify(paramCopy[i][1]));
-              if(paramCopy[i][2] !== undefined) {
-                param3 = JSON.parse(JSON.stringify(paramCopy[i][2]));
-                solParam3 = JSON.parse(JSON.stringify(paramCopy[i][2]));
-                if(paramCopy[i][3] !== undefined) {
-                  param4 = JSON.parse(JSON.stringify(paramCopy[i][3]));
-                  solParam4 = JSON.parse(JSON.stringify(paramCopy[i][3]));
-                  if(paramCopy[i][4] !== undefined) {
-                    param5 = JSON.parse(JSON.stringify(paramCopy[i][4]));
-                    solParam5 = JSON.parse(JSON.stringify(paramCopy[i][4]));
+            param0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
+            solParam0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
+            trialCopy[i][0] = (this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]));
+            if(this.state.problem.trials[i][1] !== undefined) {
+              param1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
+              solParam1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
+              trialCopy[i][1] = (this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]));
+              if(this.state.problem.trials[i][2] !== undefined) {
+                param2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
+                solParam2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
+                trialCopy[i][2] = (this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]));
+                if(this.state.problem.trials[i][3] !== undefined) {
+                  param3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
+                  solParam3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
+                  trialCopy[i][3] = (this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]));
+                  if(this.state.problem.trials[i][4] !== undefined) {
+                    param4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
+                    solParam4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
+                    trialCopy[i][4] = (this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]));
                   }
                 }
               }
             }
-            userResult = user(param1, param2, param3, param4, param5);
+            userResult = user(param0, param1, param2, param3, param4);
           } catch(err) {
             userError = err;
           }
@@ -125,7 +159,7 @@ class Problem extends Component {
           }
 
           try {
-            solutionResult = solution(solParam1, solParam2, solParam3, solParam4, solParam5);
+            solutionResult = solution(solParam0, solParam1, solParam2, solParam3, solParam4);
           } catch(err) {
             solutionError = err;
           } finally {
@@ -158,19 +192,19 @@ class Problem extends Component {
           }
         } else if(this.state.problem.examineType === "paramArray") {
           if(userError === undefined) {
-            userTrials.push(param1);
+            userTrials.push(param0);
           } else {
             userTrials.push(userError);
           }
 
           try {
-            solutionResult = solution(solParam1, solParam2, solParam3, solParam4, solParam5);
+            solutionResult = solution(solParam0, solParam1, solParam2, solParam3, solParam4);
           } catch(err) {
             solutionError = err;
           } finally {
             if(solutionError === undefined) {
-              solutionTrials.push(solParam1);
-              if(JSON.stringify(solParam1) === JSON.stringify(param1)) {
+              solutionTrials.push(solParam0);
+              if(JSON.stringify(solParam0) === JSON.stringify(param0)) {
                 comparison.push(true);
                 numCorrect++;
               } else {
@@ -195,9 +229,32 @@ class Problem extends Component {
         } 
       }   
     }
-    this.setState({trialData: {trials: indiv, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}});
+    this.setState({trialData: {trials: trialCopy, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}});
     document.getElementById("result-table").removeAttribute("hidden");
     document.getElementById("trials-passed-banner").removeAttribute("hidden");
+  }
+
+  renderTrial(element, trial) {
+    let result = "";
+    if(Array.isArray(element)) {
+      if(element.length === 0) {
+        result += "Empty Array";
+      } else {
+        result += "[" + element.join(", ") + "]";
+      }
+    } else if(typeof(element) === "string" || typeof(element) === "number" || typeof(element) === "boolean") {
+      result += JSON.stringify(element);
+    } else if(element !== undefined) {
+      result += "{ " + element.toString() + " }";
+    } else {
+      result += "Return Undefined";
+    }
+    if(trial !== undefined) {
+      if(trial[trial.length - 1] !== element) {
+        result += ", ";
+      }
+    }
+    return result;
   }
 
   render() {
@@ -247,10 +304,12 @@ class Problem extends Component {
                 {/* Console logs for each table row entry */}
                 {/* console.log(index)}{console.log(trial)}{console.log(this.state.trialData.solutionTrials[index])}{console.log(this.state.trialData.userTrials[index]) */}
 
-                <td>{index}</td>
-                <td>{trial.length === 1 ? Array.isArray(trial[0]) ? trial[0].length === 0 ? "Empty Array" : "[" + trial[0].join(", ") + "]" : JSON.stringify(trial[0]) : "{" + trial.join(", ") + "}"}</td>
-                <td>{Array.isArray(this.state.trialData.solutionTrials[index]) ? this.state.trialData.solutionTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.solutionTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.solutionTrials[index])}</td>
-                <td>{typeof(this.state.trialData.userTrials[index]) === "undefined" ? "Return Undefined" : Array.isArray(this.state.trialData.userTrials[index]) ? this.state.trialData.userTrials[index].length === 0 ? "Empty Array" : "[" + this.state.trialData.userTrials[index].join(", ") + "]" : JSON.stringify(this.state.trialData.userTrials[index])}</td>
+                <td>{index + 1}</td>
+                <td>{trial.map((element) => (
+                  this.renderTrial(element, trial)
+                ))}</td>
+                <td>{this.renderTrial(this.state.trialData.solutionTrials[index])}</td>
+                <td>{this.renderTrial(this.state.trialData.userTrials[index])}</td>
                 <td>{this.state.trialData.comparison[index] ? <img src="/images/pass.png" alt="Passed" className="pass-fail" style = {{filter: "brightness(50%)"}}></img> : <img src="/images/fail.png" alt="Failed" className="pass-fail" style = {{filter: "brightness(70%)"}}></img>} {this.state.trialData.comparison[index] ? "Pass" : "Fail"} </td>
               </tr>
             ))}</tbody></table>
