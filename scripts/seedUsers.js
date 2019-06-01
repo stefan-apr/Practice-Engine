@@ -14,6 +14,18 @@ const userSeed = [
     password: "111",
     completed: ["5cf20e31ea247115f406538a"]
   },
+  {
+    username: "sapreut",
+    password: "testingPassword"
+  },
+  {
+    username: "bestuserever",
+    password: "111"
+  },
+  {
+    username: "badcoder",
+    password: "111"
+  }
 ];
 
 db.User
