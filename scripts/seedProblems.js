@@ -1,4 +1,6 @@
 const ListNode = require("../client/src/components/LinkedList/SeedList");
+const Queue = require("../client/src/components/Queue/SeedQueue");
+const Stack = require("../client/src/components/Stack/SeedStack");
 const mongoose = require("mongoose");
 const db = require("../models");
 
@@ -310,6 +312,40 @@ const sumAlongTrials = [
   [new ListNode(4, new ListNode(8)), "This is a String"]
 ];
 
+const stutterQuestion = "Write an anonymous function that takes a Stack of values as a parameter and replaces every value in the stack with \
+  two occurrences of that value. For example, suppose a Stack stores the following values: bottom [3, 7, 1, 14, 9] top. After the function \
+  resolves, the Stack should store the following values: bottom [3, 3, 7, 7, 1, 1, 14, 14, 9, 9] top. Note that the original order of values \
+  must be preserved. You may create one Queue and use it as auxillary storage. You may assume that every item in the Stack is a basic type (Number, \
+  Boolean, String, etc.)";
+
+const stutterSolution = "function(values) { \
+  let q = new Queue(); \
+  let stackSize = 0; \
+  while(!values.isEmpty()) { \
+      let value = values.pop(); \
+      q.add(value); \
+      q.add(value); \
+      stackSize++; \
+  } \
+  for(let i = 0; i < stackSize * 2; i++) { \
+      values.push(q.remove()); \
+  } \
+  for(let i = 0; i < stackSize * 2; i++) { \
+      q.add(values.pop()); \
+  } \
+  while(!q.isEmpty()) { \
+      values.push(q.remove()); \
+  } \
+}";
+
+const stutterTrials = [
+  [new Stack([3, 7, 1, 14, 9])],
+  [new Stack([1, 2, 3, 4, 0, -4, -3, -2, -1])],
+  [new Stack([0])],
+  [new Stack([1, false, "String", 4.2])],
+  [new Stack([])]
+]
+
 const problemSeed = [
   {
     title: "Factorial",
@@ -429,6 +465,18 @@ const problemSeed = [
     category: "Linked Lists",
     examineType: "return",
     paramTypes: ["LinkedList", "Number"],
+    verified: true
+  },
+  {
+    title: "Stutter",
+    author: "sapreut",
+    question: stutterQuestion,
+    solution: stutterSolution,
+    trials: stutterTrials,
+    difficulty: 3,
+    category: "Stacks and Queues",
+    examineType: "paramStackQueue",
+    paramTypes: ["Stack"],
     verified: true
   }
 ];
