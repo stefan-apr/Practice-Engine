@@ -7,6 +7,7 @@ import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
+import Footer from "./components/Footer"
 import "./style.css";
 
 
@@ -81,6 +82,7 @@ class App extends Component {
               <Route exact path="/signIn" render={(props) => <SignIn {...props} updateLogin={this.updateLogin}/>} />
               <Route component={NoMatch} />
             </Switch>
+            <Footer />
           </div>
         </Router>    
     );

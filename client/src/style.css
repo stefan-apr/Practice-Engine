@@ -42,3 +42,16 @@ span:hover {
     color: white;
     cursor: pointer;
 }
+
+.footer {
+    margin-top: 20px
+}
+
+.backLink {
+    color: black;
+    font-weight: 60;
+}
+
+.backLink:hover {
+    color:gray
+}
