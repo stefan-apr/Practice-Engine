@@ -8,11 +8,13 @@ import CodeMirrorEditor from '../components/CodeMirrorEditor';
 import ListNode from "../components/LinkedList/ListNode.js";
 import Queue from "../components/Queue/Queue.js";
 import Stack from "../components/Stack/Stack.js";
+import "../style.css";
 require('codemirror/mode/javascript/javascript');
 import ('codemirror/lib/codemirror.css');
 import ('codemirror/theme/material.css');
 var babel = require("babel-core");
 var loopcontrol = require("../components/BabelControl/loopcontrol");
+
 
 class Problem extends Component {
   
@@ -404,7 +406,7 @@ class Problem extends Component {
         </Row>
         <Row>
           <Col size="md-2">
-            <Link to="/">← Back to Problems</Link>
+            <Link className="backLink" to="/">← Back to Problems</Link>
           </Col>
         </Row>
       </Container>

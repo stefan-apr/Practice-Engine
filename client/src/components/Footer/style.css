@@ -1,0 +1,19 @@
+.footer {
+    margin-top: -20px;
+    background-color: gray;
+    height: 60px;
+    padding: 20px;
+    position: absolute;
+    width: 100%;
+    top:120%
+}
+
+.footerlink {
+    color: white;
+    text-decoration: none
+}
+
+a {
+    color: white;
+    text-decoration: none
+}
