@@ -1,7 +1,9 @@
 .logo {
-    float:left
+    float:left;
+    font-size: 30px
 }
 
 .navbar {
     height: 60px
 }
+
