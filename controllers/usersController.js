@@ -8,10 +8,10 @@ module.exports = {
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
     },
-    findById: function(req, res) {
+    findByName: function(req, res) {
         db.User
-          .findById(req.params.id)
-          .then(dbModel => res.json(dbModel))
+          .findOne({ username: req.params.username})
+          .then(dbModel => res.send(dbModel))
           .catch(err => res.status(422).json(err));
       },
     create: function(req, res) {
@@ -29,7 +29,7 @@ module.exports = {
     },
     update: function(req, res) {
         db.User
-          .findOneAndUpdate({ _id: req.params.id }, req.body)
+          .findOneAndUpdate({ username: req.params.username }, req.body)
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
     },

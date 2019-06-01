@@ -10,23 +10,10 @@ mongoose.connect(
 
 const userSeed = [
   {
-    username: "sapreut",
-    password: "testingPassword",
-    completed: [],
-    created: [],
-  },
-  {
-    username: "InterGalacticKillar",
+    username: "axion",
     password: "111",
-    completed: [],
-    created: [],
+    completed: ["5cf20e31ea247115f406538a"]
   },
-  {
-    username: "ethan",
-    password: "111",
-    completed: [],
-    created: [],
-  }
 ];
 
 db.User

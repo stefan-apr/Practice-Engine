@@ -16,19 +16,28 @@ class App extends Component {
 
     this.state = {
       loggedIn: false,
-      username: ''
+      username: '',
+      solved: []
     };
     
     this.updateLogin = this.updateLogin.bind(this);
   }
 
-  updateLogin = (username) => {
+  updateLogin = (username, solvedArr) => {
     this.setState({
       loggedIn: true,
-      username: username
+      username: username,
+      solved: solvedArr
     });
+    //console.log(this.state);
   }
   
+  updateArr = (newArr) => {
+    this.setState({
+      solved: newArr
+    });
+  }
+
   renderRedirect = () => {
     return <Redirect to='/' />
   }
@@ -37,7 +46,8 @@ class App extends Component {
     alert("You have successfully logged out")
     this.setState({
       loggedIn: false,
-      username: ''
+      username: '',
+      solved: []
     })
   }
 
@@ -56,12 +66,17 @@ class App extends Component {
             <Switch>
               {/* https://stackoverflow.com/questions/49162311/react-difference-between-route-exact-path-and-route-path */}
               <Route exact path="/" render={props =>
-                                              <div>
-                                                <Problems />
-                                              </div>
+                                                <Problems {...props} 
+                                                          currentUser={ this.state.username }
+                                                          solvedArr={ this.state.solved }
+                                                />
                                             } />
               <Route exact path="/problems" component={Problems} />
-              <Route exact path="/problems/:id" component={Problem} />
+              <Route exact path="/problems/:id" render={(props) => <Problem {...props} 
+                                                                              currentUser={ this.state.username }
+                                                                              solvedArr={ this.state.solved }
+                                                                              updateArr={ this.updateArr }
+                                                                            />} />
               <Route exact path="/signup" render={(props) => <SignUp {...props} updateLogin={this.updateLogin}/>} />
               <Route exact path="/signIn" render={(props) => <SignIn {...props} updateLogin={this.updateLogin}/>} />
               <Route component={NoMatch} />

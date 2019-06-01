@@ -29,8 +29,9 @@ class Problem extends Component {
     API.getProblem(this.props.match.params.id)
       .then(res => this.setState({ problem: res.data }))
       .then(() => this.setState({lastSolution: window.localStorage.getItem(this.state.problem.title)}))
-      .then(/* () => console.log(this.state.problem) */)
+      //.then(() => console.log(this.state.problem))
       .catch(err => console.log(err));
+      
   }
 
   handleChange = event => {
@@ -269,9 +270,51 @@ class Problem extends Component {
         }
       }   
     }
-    this.setState({trialData: {trials: trialCopy, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}});
+    setTimeout(() =>{
+      this.setState({
+        trialData: {trials: trialCopy, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}
+      });
+      //console.log("here I checked state", this.state.trialData);
+      this.updateCompleted();
+    }, 1000)
+    
     document.getElementById("result-table").removeAttribute("hidden");
     document.getElementById("trials-passed-banner").removeAttribute("hidden");
+
+    //score, update database, update user history
+    
+
+  }
+
+  updateCompleted() {
+    //console.log("myfunc: ", this.props.solvedArr)
+    const completedArr = this.props.solvedArr;
+    console.log("comparison array", this.state.trialData.comparison);
+    if (this.allPass(this.state.trialData.comparison) 
+        && (this.props.currentUser.length > 0) 
+        && (!this.props.solvedArr.includes(this.state.problem._id))) 
+    {
+      console.log("all passed");
+      completedArr.push(this.state.problem._id);  
+      this.props.updateArr(completedArr);
+      API.updateUser(this.props.currentUser, {completed: completedArr, score: completedArr.length})
+        .then(res => console.log(res));
+    } else {
+      console.log("no new solved question added");
+    }
+  }
+
+  allPass(arr) {
+    if (arr.length === 0) {
+      return false;
+    } else {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === false) {
+          return false;
+        }
+      }
+      return true;
+    }
   }
 
   renderTrial(element, trial) {
