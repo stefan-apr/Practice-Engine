@@ -6,6 +6,8 @@ import API from "../utils/API";
 import { FormBtn } from "../components/Form";
 import CodeMirrorEditor from '../components/CodeMirrorEditor';
 import ListNode from "../components/LinkedList/ListNode.js";
+import Queue from "../components/Queue/Queue.js";
+import Stack from "../components/Stack/Stack.js";
 require('codemirror/mode/javascript/javascript');
 import ('codemirror/lib/codemirror.css');
 import ('codemirror/theme/material.css');
@@ -57,7 +59,21 @@ class Problem extends Component {
     } else if (type === "LinkedList") {
       var list = this.generateLinkedList(variable);
       return list;
+    } else if (type === "Stack") {
+      var stack = this.generateSQ(variable, "Stack");
+    } else if(type === "Queue") {
+      var queue = this.generateSQ(variable, "Queue");
     }
+  }
+
+  generateSQ = function(obj, type) {
+    let SQ = null;
+    if(type === "Queue") {
+
+    } else {
+
+    }
+    return SQ;
   }
 
   generateLinkedList = function(obj) {
@@ -220,13 +236,37 @@ class Problem extends Component {
               }
             }
           }
-        } else if(this.state.problem.examineType === "paramLinkedList") {
+        } else if(this.state.problem.examineType === "paramStackQueue" || this.state.problem.examineType === "paramLinkedList") {
+          if(userError === undefined) {
+            userTrials.push(param0);
+          } else {
+            userTrials.push(userError);
+          }
 
-        } else if(this.state.problem.examineType === "paramStack") {
-
-        } else if(this.state.problem.examineType === "paramQueue") {
-
-        } 
+          try {
+            solutionResult = solution(solParam0, solParam1, solParam2, solParam3, solParam4);
+          } catch(err) {
+            solutionError = err;
+          } finally {
+            if(solutionError === undefined) {
+              solutionTrials.push(solParam0);
+              if(solParam0.toString() === param0.toString()) {
+                comparison.push(true);
+                numCorrect++;
+              } else {
+                comparison.push(false);
+              }
+            } else {
+              solutionTrials.push(solutionError);
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+                comparison.push(true);
+                numCorrect++;
+              } else {
+                comparison.push(false);
+              }
+            }
+          }
+        }
       }   
     }
     this.setState({trialData: {trials: trialCopy, userTrials: userTrials, solutionTrials: solutionTrials, comparison: comparison, numCorrect: numCorrect}});

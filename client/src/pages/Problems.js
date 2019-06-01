@@ -76,7 +76,7 @@ class Problems extends Component {
                    <Collapse in={this.state.shown[category]}>
                     <ul id={"collapse-" + category} className="problem-list-shell">
                       {this.state.problems.map(problem => (
-                        problem.category === category ? <li key={problem._id} className="problem-list-item-pass"><Link to={"/problems/" + problem._id}><h5>{problem.title}</h5></Link></li> : ""
+                        problem.category === category ? <li key={problem._id} className={true ? "problem-list-item-pass" : "problem-list-item-incomplete"}><Link to={"/problems/" + problem._id}><h5>{problem.title}</h5></Link></li> : ""
                       ))}
                     </ul>
                    </Collapse>
