@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Collapse from 'react-bootstrap/Collapse'
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
+import Leaderboard from "../components/Leaderboard"
 
 /*
 function sleep(ms) {
@@ -51,7 +52,7 @@ class Problems extends Component {
              [category]: !this.state.shown[category]
          }
      })
- }
+  }
 
   render() {
     const {shown} = this.state;
@@ -61,7 +62,7 @@ class Problems extends Component {
           <Col size="md-12 sm-12">
             <Jumbotron>
               <h2>Problems:</h2><br></br>
-            <h3>Click on a category to see its available problems.</h3>
+              <h3>Click on a category to see its available problems.</h3>
             </Jumbotron>
             {this.state.problems.length ? (
              <List>
@@ -89,6 +90,7 @@ class Problems extends Component {
             )}
           </Col>
         </Row>
+        <Leaderboard />
       </Container>
     );
   }

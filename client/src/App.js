@@ -7,7 +7,7 @@ import NoMatch from "./pages/NoMatch";
 import Nav from "./components/Nav";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
-
+import "./style.css";
 
 
 class App extends Component {
@@ -48,15 +48,19 @@ class App extends Component {
             <Nav />
             <Switch>
               <p>{this.state.loggedIn 
-                  ? (<div>
-                      {this.state.username}
-                      <button onClick={this.logOut}>Log Out</button>
+                  ? (<div className="loggedIn-area">
+                      <p className="user-name">Hi, {this.state.username}</p>
+                      <span><a className="logoutbtn" onClick={this.logOut}>Log Out</a></span>
                     </div>) 
-                  : <a href="/signIn">Login</a>}</p>
+                  : <a className="signIn-area" href="/signIn">Sign in</a>}</p>
             </Switch>
             <Switch>
               {/* https://stackoverflow.com/questions/49162311/react-difference-between-route-exact-path-and-route-path */}
-              <Route exact path="/" component={Problems} />
+              <Route exact path="/" render={props =>
+                                              <div>
+                                                <Problems />
+                                              </div>
+                                            } />
               <Route exact path="/problems" component={Problems} />
               <Route exact path="/problems/:id" component={Problem} />
               <Route exact path="/signup" render={(props) => <SignUp {...props} updateLogin={this.updateLogin}/>} />

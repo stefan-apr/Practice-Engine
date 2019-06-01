@@ -20,6 +20,7 @@ export default {
 
   // Gets all users
   getUsers: function() {
+    console.log("API fired")
     return axios.get("/api/users");
   },
   // Gets the user with the given id
@@ -38,5 +39,8 @@ export default {
   validateInfo: function(username) {
     const query = "/api/users/validate/" + username;
     return axios.get(query);
+  },
+  getTopUsers: function() {
+    return axios.get("/api/users");
   }
 };
