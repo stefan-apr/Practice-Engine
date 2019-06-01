@@ -16,7 +16,7 @@ module.exports = function(babel) {
                t.callExpression(t.memberExpression(t.identifier("Date"), t.identifier("now")), [])
             );
             path.insertBefore(t.expressionStatement(definition));
-            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(1600)));
+            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(800)));
             path
                .get("body")
                .pushContainer(
@@ -38,7 +38,7 @@ module.exports = function(babel) {
                t.callExpression(t.memberExpression(t.identifier("Date"), t.identifier("now")), [])
             );
             path.insertBefore(t.expressionStatement(definition));
-            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(1600)));
+            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(800)));
             path
                .get("body")
                .pushContainer(
@@ -60,7 +60,7 @@ module.exports = function(babel) {
                t.callExpression(t.memberExpression(t.identifier("Date"), t.identifier("now")), [])
             );
             path.insertBefore(t.expressionStatement(definition));
-            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(1600)));
+            const lhs = t.parenthesizedExpression(t.binaryExpression("+", variableName, t.NumericLiteral(800)));
             path
                .get("body")
                .pushContainer(

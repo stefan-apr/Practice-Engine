@@ -103,11 +103,10 @@ class Problem extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    //this.setState({lastSolution: null});
-
     const { name, value } = event.target;
     this.setState({
       [name]: value,
+      lastSolution: ""
     });
 
     window.localStorage.setItem(this.state.problem.title, this.state.userSolution);
@@ -368,7 +367,7 @@ class Problem extends Component {
           <Col size="md-10 md-offset-1">
             
             <h3>Input your solution:</h3>
-            <CodeMirrorEditor onChange={this.handleChange} id="response" name="userSolution" value={this.state.lastSolution || this.state.userSolution} />
+            <CodeMirrorEditor onChange={this.handleChange} id="response" name="userSolution" value={this.state.userSolution.length ? this.state.userSolution : this.state.lastSolution} />
             <FormBtn
               disabled={!(this.state.userSolution || this.state.lastSolution)}
               onClick={this.handleSubmit}
