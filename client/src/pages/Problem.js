@@ -37,7 +37,6 @@ class Problem extends Component {
   }
 
   handleChange = event => {
-    this.setState({lastSolution: null});
     var editor = document.querySelector('.CodeMirror').CodeMirror;
     const value = editor.getValue();
     this.setState({
@@ -103,6 +102,8 @@ class Problem extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
+    //this.setState({lastSolution: null});
 
     const { name, value } = event.target;
     this.setState({
