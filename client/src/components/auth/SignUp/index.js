@@ -20,7 +20,7 @@ class SignUp extends Component {
         event.preventDefault();
         API.saveUser(this.state)
             .then(() => { alert("User created!");
-                          this.props.updateLogin(this.state.username);
+                          this.props.updateLogin(this.state.username, []);
                           this.props.history.push("/");
                         });
     }

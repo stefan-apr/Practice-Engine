@@ -24,8 +24,8 @@ export default {
     return axios.get("/api/users");
   },
   // Gets the user with the given id
-  getUser: function(id) {
-    return axios.get("/api/users/" + id);
+  getUser: function(username) {
+    return axios.get("/api/users/" + username);
   },
   // Deletes the user with the given id
   deleteUser: function(id) {
@@ -40,7 +40,11 @@ export default {
     const query = "/api/users/validate/" + username;
     return axios.get(query);
   },
+  // Gets the top 5 users
   getTopUsers: function() {
     return axios.get("/api/users");
+  },
+  updateUser: function(username, updatedArr) {
+    return axios.put(("/api/users/" + username), updatedArr)
   }
 };

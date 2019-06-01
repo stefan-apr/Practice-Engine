@@ -6,10 +6,10 @@ router.route("/")
   .get(userController.getTops)
   .post(userController.create);
 
-// Matches with "/api/users/:id"
+// Matches with "/api/users/:username"
 router
-  .route("/:id")
-  .get(userController.findById)
+  .route("/:username")
+  .get(userController.findByName)
   .put(userController.update)
   .delete(userController.remove);
 

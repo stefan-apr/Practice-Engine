@@ -17,11 +17,12 @@ class SignIn extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        API.validateInfo(this.state.username)
+        API.getUser(this.state.username)
             .then((res) => {if (res.data.password === this.state.password) 
                                 { 
                                     alert("Welcome back " + res.data.username);
-                                    this.props.updateLogin(res.data.username);
+                                    this.props.updateLogin(res.data.username, res.data.completed);
+                                    //console.log("in sign in, the completed array is: ", res.data.completed)
                                     this.props.history.push("/");
                                 } else 
                                 { alert("login failed") } 
