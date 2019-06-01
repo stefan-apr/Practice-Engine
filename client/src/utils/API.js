@@ -34,4 +34,9 @@ export default {
   saveUser: function(userData) {
     return axios.post("/api/users", userData);
   },
+  // Validate login info
+  validateInfo: function(username) {
+    const query = "/api/users/validate/" + username;
+    return axios.get(query);
+  }
 };

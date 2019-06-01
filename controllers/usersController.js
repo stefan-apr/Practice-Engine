@@ -15,8 +15,15 @@ module.exports = {
           .catch(err => res.status(422).json(err));
       },
     create: function(req, res) {
+        const populatedInfo = {
+          username: req.body.username,
+          password: req.body.password,
+          completed: [],
+          created: [],
+        };
+
         db.User
-          .create(req.body)
+          .create(populatedInfo)
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
     },
@@ -32,5 +39,11 @@ module.exports = {
           .then(dbModel => dbModel.remove())
           .then(dbModel => res.json(dbModel))
           .catch(err => res.status(422).json(err));
+    },
+    validate: function(req, res){
+      db.User
+        .findOne({ username: req.params.username }, function (err, userInfo) {
+          res.send(userInfo);
+        })
     }
 }

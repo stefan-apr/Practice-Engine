@@ -1,12 +1,20 @@
 import React from "react";
+import { Row, Col } from "../Grid";
+import "./style.css";
 
 function Nav() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a className="navbar-brand" href="/">
-        React Reading List
-      </a>
-    </nav>
+    
+    <Row>
+      <Col size="md-12">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a className="navbar-brand logo" href="/">
+            Practice Engine
+          </a>
+        </nav>
+      </Col>
+     
+    </Row>
   );
 }
 

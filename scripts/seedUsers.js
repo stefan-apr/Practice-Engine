@@ -14,14 +14,18 @@ const userSeed = [
     password: "testingPassword",
     completed: [],
     created: [],
-    dateJoined: new Date()
   },
   {
     username: "InterGalacticKillar",
     password: "111",
     completed: [],
     created: [],
-    dateJoined: new Date()
+  },
+  {
+    username: "ethan",
+    password: "111",
+    completed: [],
+    created: [],
   }
 ];
 
