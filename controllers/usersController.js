@@ -45,5 +45,14 @@ module.exports = {
         .findOne({ username: req.params.username }, function (err, userInfo) {
           res.send(userInfo);
         })
+    },
+    getTops: function(req, res) {
+      db.User
+        .find()
+        .sort({'score': -1})
+        .limit(5)
+        .exec(function(err, topUsers){
+          res.send(topUsers);
+        })
     }
 }

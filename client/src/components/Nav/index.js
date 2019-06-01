@@ -3,8 +3,8 @@ import { Row, Col } from "../Grid";
 import "./style.css";
 
 function Nav() {
+  
   return (
-    
     <Row>
       <Col size="md-12">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -13,7 +13,6 @@ function Nav() {
           </a>
         </nav>
       </Col>
-     
     </Row>
   );
 }

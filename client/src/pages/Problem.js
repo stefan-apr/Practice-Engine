@@ -305,19 +305,22 @@ class Problem extends Component {
           <Col size="md-12">
             <Jumbotron>
               <h1>
-                {this.state.problem.title}, Category: {this.state.problem.category}
+                {this.state.problem.title}
+                <br />
               </h1>
+              <h4>Category: {this.state.problem.category}</h4>
+              <br />
+              <article style={{textAlign:"left"}}>
+              <p>
+                {this.state.problem.question}
+              </p>
+            </article>
             </Jumbotron>
           </Col>
         </Row>
         <Row>
           <Col size="md-10 md-offset-1">
-            <article>
-              <h1>Description</h1>
-              <p>
-                {this.state.problem.question}
-              </p>
-            </article>
+            
             <h3>Input your solution:</h3>
             <CodeMirrorEditor onChange={this.handleChange} id="response" name="userSolution" value={this.state.lastSolution || this.state.userSolution} />
             <FormBtn
