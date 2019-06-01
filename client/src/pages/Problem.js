@@ -57,23 +57,23 @@ class Problem extends Component {
     } else if(type === "Array") {
       return JSON.parse(JSON.stringify(variable));
     } else if (type === "LinkedList") {
-      var list = this.generateLinkedList(variable);
+      let list = this.generateLinkedList(variable);
       return list;
     } else if (type === "Stack") {
-      var stack = this.generateSQ(variable, "Stack");
+      let stack = this.generateSQ(variable, "Stack");
+      return stack;
     } else if(type === "Queue") {
-      var queue = this.generateSQ(variable, "Queue");
+      let queue = this.generateSQ(variable, "Queue");
+      return queue
     }
   }
 
   generateSQ = function(obj, type) {
-    let SQ = null;
     if(type === "Queue") {
-
+      return new Queue(obj.items);
     } else {
-
+      return new Stack(obj.items);
     }
-    return SQ;
   }
 
   generateLinkedList = function(obj) {
@@ -123,6 +123,30 @@ class Problem extends Component {
       let param0; let param1; let param2; let param3; let param4;
       let solParam0; let solParam1; let solParam2; let solParam3; let solParam4;
 
+      param0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
+      solParam0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
+      trialCopy[i][0] = (this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]));
+      if(this.state.problem.trials[i][1] !== undefined) {
+        param1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
+        solParam1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
+        trialCopy[i][1] = (this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]));
+        if(this.state.problem.trials[i][2] !== undefined) {
+          param2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
+          solParam2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
+          trialCopy[i][2] = (this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]));
+          if(this.state.problem.trials[i][3] !== undefined) {
+            param3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
+            solParam3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
+            trialCopy[i][3] = (this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]));
+            if(this.state.problem.trials[i][4] !== undefined) {
+              param4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
+              solParam4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
+              trialCopy[i][4] = (this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]));
+            }
+          }
+        }
+      }
+
       try {
         if(this.state.lastSolution) {
           // eslint-disable-next-line
@@ -138,29 +162,6 @@ class Problem extends Component {
         eval(this.state.problem.solution);
         if(userError === undefined) {
           try {
-            param0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
-            solParam0 = this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]);
-            trialCopy[i][0] = (this.typeHandler(this.state.problem.paramTypes[0], this.state.problem.trials[i][0]));
-            if(this.state.problem.trials[i][1] !== undefined) {
-              param1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
-              solParam1 = this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]);
-              trialCopy[i][1] = (this.typeHandler(this.state.problem.paramTypes[1], this.state.problem.trials[i][1]));
-              if(this.state.problem.trials[i][2] !== undefined) {
-                param2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
-                solParam2 = this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]);
-                trialCopy[i][2] = (this.typeHandler(this.state.problem.paramTypes[2], this.state.problem.trials[i][2]));
-                if(this.state.problem.trials[i][3] !== undefined) {
-                  param3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
-                  solParam3 = this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]);
-                  trialCopy[i][3] = (this.typeHandler(this.state.problem.paramTypes[3], this.state.problem.trials[i][3]));
-                  if(this.state.problem.trials[i][4] !== undefined) {
-                    param4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
-                    solParam4 = this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]);
-                    trialCopy[i][4] = (this.typeHandler(this.state.problem.paramTypes[4], this.state.problem.trials[i][4]));
-                  }
-                }
-              }
-            }
             userResult = user(param0, param1, param2, param3, param4);
           } catch(err) {
             userError = err;
@@ -198,7 +199,7 @@ class Problem extends Component {
               }
             } else {
               solutionTrials.push(solutionError);
-              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/) && !userError.toString().match(/^Execution Timeout/)) {
                 comparison.push(true);
                 numCorrect++;
               } else {
@@ -228,7 +229,7 @@ class Problem extends Component {
               }
             } else {
               solutionTrials.push(solutionError);
-              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/) && !userError.toString().match(/^Execution Timeout/)) {
                 comparison.push(true);
                 numCorrect++;
               } else {
@@ -258,7 +259,7 @@ class Problem extends Component {
               }
             } else {
               solutionTrials.push(solutionError);
-              if(userError !== undefined && !userError.toString().match(/^Syntax Error/)) {
+              if(userError !== undefined && !userError.toString().match(/^Syntax Error/) && !userError.toString().match(/^Execution Timeout/)) {
                 comparison.push(true);
                 numCorrect++;
               } else {

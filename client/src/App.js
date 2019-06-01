@@ -8,8 +8,6 @@ import Nav from "./components/Nav";
 import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
 
-
-
 class App extends Component {
   constructor(props) {
     super(props);
