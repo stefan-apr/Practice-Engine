@@ -6,7 +6,7 @@ const userSchema = new Schema({
   password: {type: String, required: true},
   completed: {type: Array, required: true},
   created: {type: Array, required: true},
-  dateJoined: {type: Date, required: true}
+  dateJoined: {type: Date, default: Date.now}
 });
 
 const User = mongoose.model("User", userSchema);

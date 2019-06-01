@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import API from "../../../utils/API";
+
 
 class SignUp extends Component {
 
@@ -15,7 +17,7 @@ class SignUp extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log(this.state);
+        API.saveUser(this.state)
     }
 
     render() {

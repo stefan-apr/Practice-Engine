@@ -13,4 +13,9 @@ router
   .put(userController.update)
   .delete(userController.remove);
 
+//for login only, matches with "/api/users/validate"
+router
+  .route("/validate/:username")
+  .get(userController.validate);
+
 module.exports = router;

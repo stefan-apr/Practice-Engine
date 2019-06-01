@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import API from "../../../utils/API";
 
 class SignIn extends Component {
 
@@ -15,7 +16,10 @@ class SignIn extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        console.log(this.state);
+        API.validateInfo(this.state.username)
+            .then((res) => {(res.data.password === this.state.password) 
+                            ? this.props.updateLogin(res.data.username) 
+                            : alert("login failed")});
     }
 
     render() {
@@ -31,6 +35,7 @@ class SignIn extends Component {
                         <label htmlFor="password">Password</label>
                         <input onChange={this.handleChange} type="password" className="form-control" id="password" placeholder="Password" />
                     </div>
+                    <p><a href="/signup">Sign up</a></p>
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
             </div>
