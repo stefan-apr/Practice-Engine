@@ -10,7 +10,6 @@ class Leaderboard extends Component {
   };
 
   loadTop() {
-    console.log("run loadtop from Leadboard comp")
     API.getTopUsers()
        .then(res => {
          this.setState({
@@ -25,10 +24,9 @@ class Leaderboard extends Component {
   }
   
   render() {
-    console.log("state when rendering: ", this.state.topArr)
     return (
       <div>
-        <table class="table table-sm leaderboard">
+        <table className="table table-sm leaderboard">
           <thead>
             <tr>
               <th scope="col">Rank</th>
@@ -38,7 +36,7 @@ class Leaderboard extends Component {
           </thead>
           <tbody>
             {this.state.topArr.map((user) => (
-              <tr>
+              <tr key={user.username}>
                 <th scope="row">{this.state.topArr.indexOf(user) + 1}</th>
                 <td>{user.username}</td>
                 <td>{user.score}</td>
