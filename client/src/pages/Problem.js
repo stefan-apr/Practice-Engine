@@ -355,7 +355,7 @@ class Problem extends Component {
               </h1>
               <h4>Category: {this.state.problem.category}</h4>
               <br />
-              <article style={{textAlign:"left"}}>
+              <article style={{textAlign:"left", marginBottom: "-50px"}}>
               <p>
                 {this.state.problem.question}
               </p>

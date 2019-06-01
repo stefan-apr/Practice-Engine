@@ -71,7 +71,6 @@ class App extends Component {
                                                           solvedArr={ this.state.solved }
                                                 />
                                             } />
-              <Route exact path="/problems" component={Problems} />
               <Route exact path="/problems/:id" render={(props) => <Problem {...props} 
                                                                               currentUser={ this.state.username }
                                                                               solvedArr={ this.state.solved }
