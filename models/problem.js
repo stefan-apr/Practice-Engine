@@ -10,6 +10,7 @@ const problemSchema = new Schema({
   difficulty: {type: Number, required: true},
   category: {type: String, required: true},
   examineType: {type: String, required: true},
+  paramTypes: {type: Array, required: true},
   flags: {type: Array},
   verified: {type: Boolean, default: false}
 });

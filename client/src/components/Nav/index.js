@@ -1,5 +1,4 @@
 import React from "react";
-import Login from "../Login";
 import { Row, Col } from "../Grid";
 import "./style.css";
 
@@ -12,7 +11,6 @@ function Nav() {
           <a className="navbar-brand logo" href="/">
             Practice Engine
           </a>
-          <Login />
         </nav>
       </Col>
      

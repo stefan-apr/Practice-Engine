@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Redirect } from 'react-router-dom'
 import Problems from "./pages/Problems";
 import Problem from "./pages/Problem";
 import NoMatch from "./pages/NoMatch";
@@ -22,13 +23,16 @@ class App extends Component {
   }
 
   updateLogin = (username) => {
-    alert("Welcome back " + username);
     this.setState({
       loggedIn: true,
       username: username
     });
   }
   
+  renderRedirect = () => {
+    return <Redirect to='/' />
+  }
+
   logOut = () => {
     alert("You have successfully logged out")
     this.setState({
@@ -55,7 +59,7 @@ class App extends Component {
               <Route exact path="/" component={Problems} />
               <Route exact path="/problems" component={Problems} />
               <Route exact path="/problems/:id" component={Problem} />
-              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/signup" render={(props) => <SignUp {...props} updateLogin={this.updateLogin}/>} />
               <Route exact path="/signIn" render={(props) => <SignIn {...props} updateLogin={this.updateLogin}/>} />
               <Route component={NoMatch} />
             </Switch>

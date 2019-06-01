@@ -17,9 +17,14 @@ class SignIn extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         API.validateInfo(this.state.username)
-            .then((res) => {(res.data.password === this.state.password) 
-                            ? this.props.updateLogin(res.data.username) 
-                            : alert("login failed")});
+            .then((res) => {if (res.data.password === this.state.password) 
+                                { 
+                                    alert("Welcome back " + res.data.username);
+                                    this.props.updateLogin(res.data.username);
+                                    this.props.history.push("/");
+                                } else 
+                                { alert("login failed") } 
+                            });
     }
 
     render() {

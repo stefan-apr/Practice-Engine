@@ -1,3 +1,4 @@
+const ListNode = require("../client/src/components/LinkedList/SeedList");
 const mongoose = require("mongoose");
 const db = require("../models");
 
@@ -270,6 +271,45 @@ const hasMidpointTrials = [
   [2, 10, 6]
 ];
 
+const sumAlongQuestion = "Write an anonymous function that accepts a Linked ListNode and an integer n as parameters and returns the sum of the data \
+in the nodes along the Linked List. Your function should traverse the linked list until its end or until you have traversed over n list nodes, whichever \
+comes first. If the parameter n is not an integer or if it is less than 1, your function should throw an error. You may assume that any given ListNode's \
+data in the parameter Linked List will always be an integer value. You may assume that the parameter ListNode will not be null.";
+
+const sumAlongSolution = "solution = function(list, n) { \
+  if(isNaN(n)) { \
+    throw 'Argument must be a number.' \
+  } else if(n < 1) { \
+    throw 'Argument must be 1 or greater.' \
+  } \
+  let result = 0; \
+  if(list.next === null) { \
+    return list.data; \
+  } else { \
+    let count = 0; \
+    while(list.hasNext() && count < n) { \
+      result += list.data; \
+      list = list.next; \
+      count++; \
+    } \
+    if(count < n) {  \
+      result += list.data; \
+    } \
+    return result; \
+  } \
+}";
+
+const sumAlongTrials = [
+  [new ListNode(3, new ListNode(4, new ListNode(1, new ListNode(0, new ListNode(13, new ListNode(5, new ListNode(7, new ListNode(9)))))))), 8],
+  [new ListNode(6, new ListNode(6, new ListNode(6, new ListNode(6, new ListNode(6))))), 4],
+  [new ListNode(42, new ListNode(42)), 1],
+  [new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5, new ListNode(6, new ListNode(7, new ListNode(8, new ListNode(9, new ListNode(10, new ListNode(11, new ListNode(12, new ListNode(13))))))))))))), 42],
+  [new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5, new ListNode(6, new ListNode(7, new ListNode(8, new ListNode(9, new ListNode(10, new ListNode(11, new ListNode(12, new ListNode(13))))))))))))), 10],
+  [new ListNode(3), 15],
+  [new ListNode(4, new ListNode(8)), 0],
+  [new ListNode(4, new ListNode(8)), "This is a String"]
+];
+
 const problemSeed = [
   {
     title: "Factorial",
@@ -280,6 +320,7 @@ const problemSeed = [
     difficulty: 1,
     category: "Recursion",
     examineType: "return",
+    paramTypes: ["Number"],
     verified: true
   },
   {
@@ -291,6 +332,7 @@ const problemSeed = [
     difficulty: 2,
     category: "Array Manipulation",
     examineType: "return",
+    paramTypes: ["Array"],
     verified: true
   },
   {
@@ -302,6 +344,7 @@ const problemSeed = [
     difficulty: 3,
     category: "Array Manipulation",
     examineType: "paramArray",
+    paramTypes: ["Array"],
     verified: true
   },
   {
@@ -313,6 +356,7 @@ const problemSeed = [
     difficulty: 2,
     category: "Array Manipulation",
     examineType: "return",
+    paramTypes: ["Array"],
     verified: true
   },
   {
@@ -324,6 +368,7 @@ const problemSeed = [
     difficulty: 3,
     category: "Array Manipulation",
     examineType: "paramArray",
+    paramTypes: ["Array"],
     verified: true
   },
   {
@@ -335,6 +380,7 @@ const problemSeed = [
     difficulty: 2,
     category: "String Parsing",
     examineType: "return",
+    paramTypes: ["String"],
     verified: true
   },
   {
@@ -346,6 +392,7 @@ const problemSeed = [
     difficulty: 1,
     category: "Array Manipulation",
     examineType: "return",
+    paramTypes: ["Array"],
     verified: true
   },
   {
@@ -357,6 +404,7 @@ const problemSeed = [
     difficulty: 2,
     category: "Recursion",
     examineType: "return",
+    paramTypes: ["Number"],
     verified: true
   },
   {
@@ -368,6 +416,19 @@ const problemSeed = [
     difficulty: 1,
     category: "Conditionals and Returns",
     examineType: "return",
+    paramTypes: ["Number", "Number", "Number"],
+    verified: true
+  },
+  {
+    title: "Sum Along",
+    author: "sapreut",
+    question: sumAlongQuestion,
+    solution: sumAlongSolution,
+    trials: sumAlongTrials,
+    difficulty: 2,
+    category: "Linked Lists",
+    examineType: "return",
+    paramTypes: ["LinkedList", "Number"],
     verified: true
   }
 ];
