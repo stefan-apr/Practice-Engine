@@ -10,8 +10,8 @@
     "client": "cd client && npm run start",
     "seed": "node scripts/seedUsers.js && node scripts/seedProblems.js",
     "install": "cd client && npm install",
-    "build": "cd client && npm run build && node ../scripts/seedProblems.js && node ../scripts/seedUsers.js",
-    "heroku-postbuild": "npm run build && npm run seed && node scritps/seedProblems.js && node scripts/seedUsers.js"
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build && npm run seed"
   },
   "author": "",
   "license": "ISC",
