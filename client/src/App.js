@@ -46,14 +46,13 @@ class App extends Component {
         <Router>
           <div>
             <Nav />
-            <Switch>
-              <p>{this.state.loggedIn 
-                  ? (<div className="loggedIn-area">
-                      <p className="user-name">Hi, {this.state.username}</p>
-                      <span><a className="logoutbtn" onClick={this.logOut}>Log Out</a></span>
-                    </div>) 
-                  : <a className="signIn-area" href="/signIn">Sign in</a>}</p>
-            </Switch>
+            <p>{this.state.loggedIn 
+              ? (<div className="loggedIn-area">
+                  <p className="user-name">Hi, {this.state.username}</p>
+                  <span><a className="logoutbtn" onClick={this.logOut}>Log Out</a></span>
+                </div>) 
+              : <a className="signIn-area" href="/signIn">Sign in</a>}</p>
+            
             <Switch>
               {/* https://stackoverflow.com/questions/49162311/react-difference-between-route-exact-path-and-route-path */}
               <Route exact path="/" render={props =>

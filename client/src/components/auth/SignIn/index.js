@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import API from "../../../utils/API";
+import "./style.css";
 
 class SignIn extends Component {
 
@@ -29,19 +30,19 @@ class SignIn extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div className="container login-box">
                 <h4>Sign In</h4>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="username">Password</label>
+                        <label htmlFor="username">Username</label>
                         <input onChange={this.handleChange} type="text" className="form-control" id="username" placeholder="Username" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Password</label>
                         <input onChange={this.handleChange} type="password" className="form-control" id="password" placeholder="Password" />
                     </div>
-                    <p><a href="/signup">Sign up</a></p>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <p><a className="badge badge-light" href="/signup">Sign up</a></p>
+                    <button type="submit" className="btn btn-outline-info">Sign In</button>
                 </form>
             </div>
 
