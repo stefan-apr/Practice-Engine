@@ -89,7 +89,7 @@ img {
   filter: brightness(85%);
 }
 
-.problem-list-item-fail {
+.problem-list-item-incomplete {
   height: 23px;
   padding-left: 29px;
   padding-bottom: 9px;
