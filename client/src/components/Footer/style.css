@@ -1,11 +1,11 @@
 .footer {
-    margin-top: -20px;
+    margin-top: 60px;
     background-color: gray;
     height: 60px;
     padding: 20px;
-    position: absolute;
+    position: relative;
     width: 100%;
-    top:120%
+    top:300%
 }
 
 .footerlink {
