@@ -39,7 +39,7 @@ class Queue {
 
     toStirng() {
         let result = "";
-        result += "{ Front [" + this.items.join(", ") + "] Back }";
+        result += " Front [" + this.items.join(", ") + "] Back ";
         return result;
     }
 }

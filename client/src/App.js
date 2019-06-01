@@ -9,7 +9,6 @@ import SignUp from "./components/auth/SignUp";
 import SignIn from "./components/auth/SignIn";
 import "./style.css";
 
-
 class App extends Component {
   constructor(props) {
     super(props);

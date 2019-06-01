@@ -318,7 +318,7 @@ const stutterQuestion = "Write an anonymous function that takes a Stack of value
   must be preserved. You may create one Queue and use it as auxillary storage. You may assume that every item in the Stack is a basic type (Number, \
   Boolean, String, etc.)";
 
-const stutterSolution = "function(values) { \
+const stutterSolution = "solution = function(values) { \
   let q = new Queue(); \
   let stackSize = 0; \
   while(!values.isEmpty()) { \

@@ -37,9 +37,9 @@ class Stack {
         return this.items.length === 0;
     }
 
-    toStirng() {
+    toString() {
         let result = "";
-        result += "{ Bottom [" + this.items.join(", ") + "] Top }"
+        result += " Bottom [" + this.items.join(", ") + "] Top "
         return result;
     }
 }
